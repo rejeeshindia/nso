@@ -1,0 +1,72 @@
+module service_test {
+
+  namespace "http://example.com/service_test";
+  prefix service_test;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import tailf-common {
+    prefix tailf;
+  }
+  import tailf-ncs {
+    prefix ncs;
+  }
+
+  import tailf-ned-cisco-ios {
+    prefix ios;
+  }
+   import tailf-ned-cisco-ios-xr {
+    prefix cisco-ios-xr;
+  }
+
+
+  description
+    "Bla bla...";
+
+  revision 2016-01-01 {
+    description
+      "Initial revision.";
+  }
+
+  augment /ncs:services {
+
+  list service_test {
+    description "This is an RFS skeleton service";
+
+    key name;
+    leaf name {
+      tailf:info "Unique service id";
+      tailf:cli-allow-range;
+      type string;
+    }
+
+    uses ncs:service-data;
+    ncs:servicepoint service_test-servicepoint;
+
+     list vpe {
+        key device;
+        tailf:info "ASR 9000 device ";
+        leaf device {
+            type leafref {
+                path "/ncs:devices/ncs:device/ncs:name";
+            }
+        }
+
+	list interface{
+            key GE_number;
+            min-elements 1;
+
+            leaf GE_number {
+            tailf:info "Tunnel Interface ID";
+                mandatory true;
+                type leafref {
+                    path "/ncs:devices/ncs:device[ncs:name=current()/../../device]/ncs:config/cisco-ios-xr:interface/cisco-ios-xr:GigabitEthernet/cisco-ios-xr:id";
+                }
+        }
+
+  }
+}
+}
+}
+}
