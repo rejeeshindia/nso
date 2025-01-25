@@ -1,0 +1,5 @@
+This is a warper action for executing the service.
+
+- i.e the service should have accessed by a specific user who have access to certain service and devices. But service dint care about the NACM rules. 
+- So an action pack is made, which warps the service and will check the authorization of the user (since action can pass user details) against NACM (via a if/for loop)
+- If the check is success, the service is executed.

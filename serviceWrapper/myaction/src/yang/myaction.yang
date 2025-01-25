@@ -1,0 +1,60 @@
+module myaction {
+
+  namespace "http://example.com/myaction";
+  prefix myaction;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import tailf-common {
+    prefix tailf;
+  }
+  import tailf-ncs {
+    prefix ncs;
+  }
+  import ietf-netconf-acm {
+    prefix nacm;
+  }
+
+  description
+    "Bla bla...";
+
+  revision 2016-01-01 {
+    description
+      "Initial revision.";
+  }
+
+  augment /nacm:nacm/nacm:groups/nacm:group {
+    leaf-list device-name {
+      type leafref {
+        path "/ncs:devices/ncs:device/ncs:name";
+      }
+    }
+  }
+
+  container action {
+    tailf:action service-wrapper {
+      tailf:actionpoint myaction-action;
+      input {
+        leaf service-name{
+          type string;
+        }
+        leaf device1 {
+          type leafref {
+            path "/ncs:devices/ncs:device/ncs:name";
+          }
+        }
+        leaf device2 {
+          type leafref {
+            path "/ncs:devices/ncs:device/ncs:name";
+          }
+        }
+      }
+      output {
+        leaf result {
+          type string;
+        }
+      }
+    }
+  }
+}
