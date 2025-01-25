@@ -1,0 +1,57 @@
+module pymove {
+
+  namespace "http://example.com/pymove";
+  prefix pymove;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import tailf-common {
+    prefix tailf;
+  }
+  import tailf-ncs {
+    prefix ncs;
+  }
+
+  container action {
+    tailf:action move {
+      tailf:actionpoint pymove-action;
+      input {
+        leaf device {
+          type leafref {path "/ncs:devices/ncs:device/ncs:name";}
+        }
+
+        leaf policy {
+          type uint8;
+        }
+        leaf action  {
+          type enumeration {
+            enum after;
+            enum before;
+            enum top;
+            enum bottom;
+            }
+        }
+
+        leaf position {
+          when "../action = 'after' or ../action = 'before'";
+          type uint8;
+        }
+      }
+    }
+    tailf:action showPolicyOrder {
+      tailf:actionpoint pyshow-action;
+      input {
+        leaf device {
+          type leafref {path "/ncs:devices/ncs:device/ncs:name";}
+        }
+      }
+      output {
+        leaf result {
+          type string;
+        }
+      }
+    }
+  }
+  }
+
