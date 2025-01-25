@@ -1,0 +1,306 @@
+module eline-point2point {
+
+  namespace "http://uet-mgmt-nso001.tools.cablelink.at/eline-point2point";
+  prefix eline-point2point;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import tailf-common {
+    prefix tailf;
+  }
+  import tailf-ncs {
+    prefix ncs;
+  }
+
+  import tailf-ned-cisco-ios-xr {
+    prefix cisco-ios-xr;
+  }
+  
+  import tailf-ned-cisco-ios {
+    prefix ios;
+  }
+  
+  description
+    "eline-point2point";
+
+  revision 2018-03-03 {
+    description
+      "V1.1: Improvements based on SAG Workshop 02/2018, subject to open TAC cases";
+  }
+  
+  revision 2018-02-12 {
+    description
+      "V1.0: Initial revision.";
+  }
+  
+
+  grouping side {
+
+  	leaf device {
+		mandatory true;
+		type leafref {
+			path "/ncs:devices/ncs:device/ncs:name";
+		}
+    }
+	
+	leaf xconnect-group-name {
+		when "/ncs:devices/ncs:device[ncs:name=current()/../device]/ncs:device-type/ncs:cli/ncs:ned-id='cisco-ios-xr-id:cisco-ios-xr'";
+		type leafref {
+			path "/ncs:devices/ncs:device[ncs:name=current()/../device]/ncs:config/cisco-ios-xr:l2vpn/cisco-ios-xr:xconnect/cisco-ios-xr:group/cisco-ios-xr:name";
+		}
+    }
+	
+    choice iosxr-interface-type {
+		when "/ncs:devices/ncs:device[ncs:name=current()/device]/ncs:device-type/ncs:cli/ncs:ned-id='cisco-ios-xr-id:cisco-ios-xr'";
+		case Bundle-Ether {
+			leaf Bundle-Ether {
+				type leafref {
+					path "/ncs:devices/ncs:device[ncs:name=current()/../device]/ncs:config/cisco-ios-xr:interface/cisco-ios-xr:Bundle-Ether/cisco-ios-xr:id";
+				}
+			}
+			leaf if-description-Bundle {
+				type leafref {
+					path "/ncs:devices/ncs:device[ncs:name=current()/../device]/ncs:config/cisco-ios-xr:interface/cisco-ios-xr:Bundle-Ether[cisco-ios-xr:id=current()/../Bundle-Ether]/cisco-ios-xr:description";
+				}
+			}
+			leaf new-if-description-Bundle {
+				tailf:default-ref "../if-description-Bundle";
+				type string;
+			}
+		}
+   
+		case TenGigE {
+			leaf TenGigE {
+				type leafref {
+					path "/ncs:devices/ncs:device[ncs:name=current()/../device]/ncs:config/cisco-ios-xr:interface/cisco-ios-xr:TenGigE/cisco-ios-xr:id";
+				}
+			}
+			leaf if-description-TenGigE {
+				type leafref {
+					path "/ncs:devices/ncs:device[ncs:name=current()/../device]/ncs:config/cisco-ios-xr:interface/cisco-ios-xr:TenGigE[cisco-ios-xr:id=current()/../TenGigE]/cisco-ios-xr:description";
+				}
+			}
+			leaf new-if-description-TenGigE {
+				tailf:default-ref "../if-description-TenGigE";
+				type string;
+			}
+		}
+
+		case GigabitEthernet {
+			leaf GigabitEthernet {
+				type leafref {
+					path "/ncs:devices/ncs:device[ncs:name=current()/../device]/ncs:config/cisco-ios-xr:interface/cisco-ios-xr:GigabitEthernet/cisco-ios-xr:id";
+				}
+			}
+			leaf if-description-Gigabit {
+				type leafref {
+					path "/ncs:devices/ncs:device[ncs:name=current()/../device]/ncs:config/cisco-ios-xr:interface/cisco-ios-xr:GigabitEthernet[cisco-ios-xr:id=current()/../GigabitEthernet]/cisco-ios-xr:description";
+				}
+			}
+			leaf new-if-description-Gigabit {
+				tailf:default-ref "../if-description-Gigabit";
+				type string;
+			}
+		}
+	}
+
+   choice ios-interface-type {
+		when "/ncs:devices/ncs:device[ncs:name=current()/device]/ncs:device-type/ncs:cli/ncs:ned-id='ios-id:cisco-ios'";
+		case Port-channel {
+			leaf Port-channel {
+				type leafref {
+					path "/ncs:devices/ncs:device[ncs:name=current()/../device]/ncs:config/ios:interface/ios:Port-channel/ios:name";
+				}
+			}
+			leaf if-description-Port-channel {
+				type leafref {
+					path "/ncs:devices/ncs:device[ncs:name=current()/../device]/ncs:config/ios:interface/ios:Port-channel[ios:name=current()/../Port-channel]/ios:description";
+				}
+			}
+			leaf new-if-description-Port-channel {
+				tailf:default-ref "../if-description-Port-channel";
+				type string;
+			}
+		}
+   
+		case TenGigabitEthernet {
+			leaf Te {
+				type leafref {
+					path "/ncs:devices/ncs:device[ncs:name=current()/../device]/ncs:config/ios:interface/ios:TenGigabitEthernet/ios:name";
+				}
+			}
+			leaf if-description-Te {
+				type leafref {
+					path "/ncs:devices/ncs:device[ncs:name=current()/../device]/ncs:config/ios:interface/ios:TenGigabitEthernet[ios:name=current()/../Te]/ios:description";
+				}
+			}
+			leaf new-if-description-Te {
+				tailf:default-ref "../if-description-Te";
+				type string;
+			}
+		}
+
+		case GigabitEthernet {
+			leaf Ge {
+				type leafref {
+					path "/ncs:devices/ncs:device[ncs:name=current()/../device]/ncs:config/ios:interface/ios:GigabitEthernet/ios:name";
+				}
+			}
+			leaf if-description-Ge {
+				type leafref {
+					path "/ncs:devices/ncs:device[ncs:name=current()/../device]/ncs:config/ios:interface/ios:GigabitEthernet[ios:name=current()/../Ge]/ios:description";
+				}
+			}
+			leaf new-if-description-Ge {
+				tailf:default-ref "../if-description-Ge";
+				type string;
+			}
+		}
+	}	
+	
+	leaf efp-description {
+		tailf:default-ref "../../description";
+		type string;
+    }
+	
+    leaf efp-id {
+		default 100;
+		type uint16;
+    }
+
+    leaf encapsulation {
+		default dot1q;
+		type enumeration {
+			enum default;
+			enum dot1q;
+			enum untagged;
+		}
+    }
+
+    leaf outer-vlan-id {
+		default 100;
+		tailf:info "Valid values for outer-vlan-id are 1-4094 or none";
+		type union {
+			type uint16 {
+				range "1 .. 4094" {
+					error-message "The entered outer-vlan-id must be in the range from 1 to 4094 or none";
+				}
+			}
+			type enumeration {
+				enum none;
+			}
+		}
+    }
+
+    leaf vlan-tag-operation {
+		default pop;
+		type enumeration {
+			enum none;
+			enum pop;
+		}
+    }
+
+    leaf rewrite-pop-action {
+		default 1;
+		type enumeration {
+			enum none;
+			enum 1;
+		}
+    }
+
+    leaf cpe {
+		mandatory true;
+		type enumeration {
+			enum uFalcon;
+			enum "uFalcon SL";
+			enum ME-3400;
+			enum IE2000;
+			enum none;
+		}
+	}
+  }
+
+ 
+  list eline-point2point {
+    description "eline-point2point";
+
+	key name;
+	leaf name {
+		tailf:info "billing-type + vc-id";
+		type string {
+			pattern "(TK|ILV){1}[0-9]{1,10}" {
+				error-message "The entered value is not a valid combination (TK|ILV + vc-id)";
+			}
+		}
+	}
+
+	leaf anlagennummer {
+		type uint32 {
+			range "1..99999999";
+		}
+	}
+	
+	leaf description {
+		type string;
+	}
+
+	leaf backup-vc {
+		default no;
+		type enumeration {
+			enum yes;
+			enum no;
+		}
+	}
+			
+	container a-side {
+
+		uses side;
+		must "(encapsulation = 'default' and vlan-tag-operation = 'none' and rewrite-pop-action = 'none' and outer-vlan-id = 'none') or (encapsulation = 'dot1q' and vlan-tag-operation = 'none' and rewrite-pop-action = 'none' and outer-vlan-id <= 4094 and outer-vlan-id >= 1) or (encapsulation = 'dot1q' and vlan-tag-operation = 'pop' and rewrite-pop-action = '1' and outer-vlan-id <= 4094 and outer-vlan-id >= 1) or (encapsulation = 'untagged' and vlan-tag-operation = 'none' and rewrite-pop-action = 'none' and outer-vlan-id = 'none')" {
+			error-message "The selected combination of encapsulation / outer-vlan-id / vlan-tag-operation / rewrite-pop-action is not supported";
+		}
+    }
+
+    container z-side {
+
+		uses side;
+		must "((encapsulation = 'default' and vlan-tag-operation = 'none' and rewrite-pop-action = 'none' and outer-vlan-id = 'none') or (encapsulation = 'dot1q' and vlan-tag-operation = 'none' and rewrite-pop-action = 'none' and outer-vlan-id <= 4094 and outer-vlan-id >= 1) or (encapsulation = 'dot1q' and vlan-tag-operation = 'pop' and rewrite-pop-action = '1' and outer-vlan-id <= 4094 and outer-vlan-id >= 1) or (encapsulation = 'untagged' and vlan-tag-operation = 'none' and rewrite-pop-action = 'none' and outer-vlan-id = 'none')) and (device != ../a-side/device)" {
+			error-message "The selected combination of encapsulation / outer-vlan-id / vlan-tag-operation / rewrite-pop-action is not supported or a-side = z-side";
+		}
+    }
+
+	container z2-side {
+
+		when "../backup-vc = 'yes'";
+		uses side;
+		must "((encapsulation = 'default' and vlan-tag-operation = 'none' and rewrite-pop-action = 'none' and outer-vlan-id = 'none') or (encapsulation = 'dot1q' and vlan-tag-operation = 'none' and rewrite-pop-action = 'none' and outer-vlan-id <= 4094 and outer-vlan-id >= 1) or (encapsulation = 'dot1q' and vlan-tag-operation = 'pop' and rewrite-pop-action = '1' and outer-vlan-id <= 4094 and outer-vlan-id >= 1) or (encapsulation = 'untagged' and vlan-tag-operation = 'none' and rewrite-pop-action = 'none' and outer-vlan-id = 'none')) and (device != ../a-side/device) and (device != ../z-side/device)" {
+			error-message "The selected combination of encapsulation / outer-vlan-id / vlan-tag-operation / rewrite-pop-action is not supported or z2-side is the wrong device";
+		}
+    }
+
+    container product {
+
+		leaf product-name {
+			mandatory true;
+			type enumeration {
+				enum Standard;
+				enum Voice;
+			}
+		}
+
+		leaf product-bandwidth {
+			mandatory true;
+			tailf:info "Valid values for product-bandwidth are 1-10000 mbps";
+			type uint16 {
+				range "1 .. 10000" {
+					error-message "The entered product-bandwidth must be in the range from 1 to 10000 mbps";
+				}
+			}
+		}
+	}
+	
+	uses ncs:service-data;
+    ncs:servicepoint eline-point2point-servicepoint;
+    
+  }
+}

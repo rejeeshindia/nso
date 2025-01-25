@@ -1,0 +1,2766 @@
+<!-- eline-point2point-template.xml version 1.1 20180303 -->
+<config-template xmlns="http://tail-f.com/ns/config/1.0">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+<!-- a-side entry point -->
+  <device>
+    <name>{/a-side/device}</name>
+      <config>
+<!-- ios-xr a-side policy-map Standard egress -->
+      <policy-map xmlns="http://tail-f.com/ned/cisco-ios-xr" when="{string(/product/product-name)='Standard'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+        <class>
+          <class-default>
+            <map>class-default</map>
+            <police-rate-unit>
+              <police>
+                <rate>
+                  <cir>{$product-cir-kbps}</cir>
+                  <cir-unit>kbps</cir-unit>
+                  <burst>{$product-burst-kbyte}</burst>
+                  <burst-units>kbytes</burst-units>
+                  <conform-action>
+                    <transmit/>
+                  </conform-action>
+                </rate>
+              </police>
+            </police-rate-unit>
+          </class-default>
+        </class>
+      </policy-map>
+<!-- ios-xr a-side policy-map Voice egress -->
+      <policy-map xmlns="http://tail-f.com/ned/cisco-ios-xr" when="{string(/product/product-name)='Voice'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+        <class>
+          <class-default>
+            <map>class-default</map>
+            <police-rate-unit>
+              <police>
+                <rate>
+                  <cir>{$product-cir-kbps}</cir>
+                  <cir-unit>kbps</cir-unit>
+                  <burst>{$product-burst-kbyte}</burst>
+                  <burst-units>kbytes</burst-units>
+                  <conform-action>
+                    <transmit/>
+                  </conform-action>
+                </rate>
+              </police>
+            </police-rate-unit>
+          </class-default>
+        </class>
+      </policy-map>
+<!-- ios-xr a-side policy-map Standard ingress -->
+      <policy-map xmlns="http://tail-f.com/ned/cisco-ios-xr" when="{string(/product/product-name)='Standard'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+        <class>
+          <class-default>
+            <map>class-default</map>
+            <police-rate-unit>
+              <police>
+                <rate>
+                  <cir>{$product-cir-kbps}</cir>
+                  <cir-unit>kbps</cir-unit>
+                  <burst>{$product-burst-kbyte}</burst>
+                  <burst-units>kbytes</burst-units>
+                  <conform-action>
+                    <set>
+                      <mpls>
+                        <experimental>
+                          <topmost>2</topmost>
+                        </experimental>
+                      </mpls>
+                    </set>
+                  </conform-action>
+                </rate>
+              </police>
+            </police-rate-unit>
+          </class-default>
+        </class>
+      </policy-map>
+<!-- ios-xr a-side policy-map Voice ingress -->
+      <policy-map xmlns="http://tail-f.com/ned/cisco-ios-xr" when="{string(/product/product-name)='Voice'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+        <class>
+          <class-default>
+            <map>class-default</map>
+            <police-rate-unit>
+              <police>
+                <rate>
+                  <cir>{$product-cir-kbps}</cir>
+                  <cir-unit>kbps</cir-unit>
+                  <burst>{$product-burst-kbyte}</burst>
+                  <burst-units>kbytes</burst-units>
+                  <conform-action>
+                    <set>
+                      <mpls>
+                        <experimental>
+                          <topmost>5</topmost>
+                        </experimental>
+                      </mpls>
+                    </set>
+                  </conform-action>
+                </rate>
+              </police>
+            </police-rate-unit>
+          </class-default>
+        </class>
+      </policy-map>
+<!-- ios a-side policy-map Standard egress -->
+      <policy-map xmlns="urn:ios" when="{string(/product/product-name)='Standard'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-C-E</name>
+        <class-default>
+          <class>
+            <name>class-default</name>
+            <bandwidth>
+              <percent>100</percent>
+            </bandwidth>
+          </class>
+        </class-default>
+      </policy-map>
+      <policy-map xmlns="urn:ios" when="{string(/product/product-name)='Standard'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+        <class-default>
+          <class>
+            <name>class-default</name>
+            <shape>
+              <average>
+                <bit-rate>{$product-cir-bps}</bit-rate>
+              </average>
+            </shape>
+            <service-policy>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-C-E</service-policy>
+          </class>
+        </class-default>
+      </policy-map>
+<!-- ios a-side policy-map Voice egress -->
+      <policy-map xmlns="urn:ios" when="{string(/product/product-name)='Voice'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-C-E</name>
+        <class-default>
+          <class>
+            <name>class-default</name>
+            <bandwidth>
+              <percent>100</percent>
+            </bandwidth>
+          </class>
+        </class-default>
+      </policy-map>
+      <policy-map xmlns="urn:ios" when="{string(/product/product-name)='Voice'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+        <class-default>
+          <class>
+            <name>class-default</name>
+            <shape>
+              <average>
+                <bit-rate>{$product-cir-bps}</bit-rate>
+              </average>
+            </shape>
+            <service-policy>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-C-E</service-policy>
+          </class>
+        </class-default>
+      </policy-map>
+<!-- ios a-side policy-map Standard ingress -->
+      <policy-map xmlns="urn:ios" when="{string(/product/product-name)='Standard'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+        <class-default>
+          <class>
+            <name>class-default</name>
+            <police-policy-map>
+              <police>
+                <cir>{$product-cir-bps}</cir>
+                <bc>{$product-burst-byte}</bc>
+                <actions>
+                  <conform-set-mpls-exp-imposition-transmit>
+                    <conform-action>
+                      <set-mpls-exp-imposition-transmit>2</set-mpls-exp-imposition-transmit>
+                    </conform-action>
+                  </conform-set-mpls-exp-imposition-transmit>
+                </actions>
+              </police>
+            </police-policy-map>
+          </class>
+        </class-default>
+      </policy-map>
+<!-- ios a-side policy-map Voice ingress -->
+      <policy-map xmlns="urn:ios" when="{string(/product/product-name)='Voice'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+        <class-default>
+          <class>
+            <name>class-default</name>
+            <police-policy-map>
+              <police>
+                <cir>{$product-cir-bps}</cir>
+                <bc>{$product-burst-byte}</bc>
+                <actions>
+                  <conform-set-mpls-exp-imposition-transmit>
+                    <conform-action>
+                      <set-mpls-exp-imposition-transmit>5</set-mpls-exp-imposition-transmit>
+                    </conform-action>
+                  </conform-set-mpls-exp-imposition-transmit>
+                </actions>
+              </police>
+            </police-policy-map>
+          </class>
+        </class-default>
+      </policy-map>
+<!-- ios-xr a-side l2tp ethernet-services access-list -->
+      <ethernet-services xmlns="http://tail-f.com/ned/cisco-ios-xr" when="{$l2tpacl-a-side='yes'}">
+        <access-list>
+          <name>BLOCK_TUNNEL</name>
+          <rule>
+            <id>10</id>
+            <line>deny any host 0100.0ccd.cdd0</line>
+          </rule>
+          <rule>
+            <id>20</id>
+            <line>deny host 0100.0ccd.cdd0 any</line>
+          </rule>
+          <rule>
+            <id>30</id>
+            <line>permit any any</line>
+          </rule>
+        </access-list>
+      </ethernet-services>
+<!-- ios-xr a-side interfaces -->
+      <interface xmlns="http://tail-f.com/ned/cisco-ios-xr">
+<!-- ios-xr a-side main interface GigabitEthernet -->
+      <GigabitEthernet when="{$interface-type-a-side='GigabitEthernet'}">
+        <id>{$interface-number-a-side}</id>
+        <!--description tags="delete"/-->
+		<description when="{not(/a-side/new-if-description-Gigabit='')}">{/a-side/new-if-description-Gigabit}</description>
+        <mtu>9014</mtu>
+        <ipv4 tags="delete"/>
+        <proxy-arp tags="delete"/>
+        <transceiver>
+          <permit>
+            <pid>
+              <all/>
+            </pid>
+          </permit>
+        </transceiver>
+		<ethernet when="{$eoam-a-side='yes'}">
+          <oam>
+            <action>
+              <wiring-conflict>disable</wiring-conflict>
+            </action>
+          </oam>
+        </ethernet>
+        <ethernet when="{$eoam-a-side='no'}">
+          <oam tags="delete"/>
+        </ethernet>
+        <shutdown tags="delete"/>
+        <negotiation when="{$negauto-a-side='yes'}">
+          <auto/>
+        </negotiation>
+        <negotiation when="{$negauto-a-side='no'}">
+          <auto tags="delete"/>
+        </negotiation>
+      </GigabitEthernet>
+<!-- ios-xr a-side subinterfaces GigabitEthernet -->
+      <GigabitEthernet-subinterface when="{$interface-type-a-side='GigabitEthernet'}">
+<!-- ios-xr a-side subinterface GigabitEthernet.90 -->
+        <GigabitEthernet when="{not(/a-side/cpe='none')}">
+          <id>{$interface-number-a-side}.90</id>
+          <mode>l2transport</mode>
+          <encapsulation>
+            <dot1q>
+              <vlan-id>90</vlan-id>
+            </dot1q>
+          </encapsulation>
+          <rewrite>
+            <ingress>
+              <tag>
+                <pop>1</pop>
+                <mode>symmetric</mode>
+              </tag>
+            </ingress>
+          </rewrite>
+        </GigabitEthernet>
+<!-- ios-xr a-side subinterface GigabitEthernet.efp-id -->
+        <GigabitEthernet>
+          <id tags="create">{$interface-number-a-side}.{/a-side/efp-id}</id>
+          <mode>l2transport</mode>
+          <description>{string(/name)} {/a-side/efp-description}</description>
+          <encapsulation when="{/a-side/encapsulation='default'}">
+            <default/>
+          </encapsulation>
+          <encapsulation when="{/a-side/encapsulation='dot1q'}">
+            <dot1q>
+              <vlan-id>{/a-side/outer-vlan-id}</vlan-id>
+            </dot1q>
+          </encapsulation>
+          <encapsulation when="{/a-side/encapsulation='untagged'}">
+            <untagged/>
+          </encapsulation>
+          <service-policy when="{string(/product/product-name)='Standard'}">
+            <input>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+            </input>
+            <output>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+            </output>
+          </service-policy>
+          <service-policy when="{string(/product/product-name)='Voice'}">
+            <input>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+            </input>
+            <output>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+            </output>
+          </service-policy>
+          <ethernet-services when="{$l2tpacl-a-side='yes'}">
+            <access-group>
+              <direction>egress</direction>
+              <name>BLOCK_TUNNEL</name>
+            </access-group>
+          </ethernet-services>
+          <rewrite when="{/a-side/encapsulation='dot1q'}">
+            <ingress when="{/a-side/vlan-tag-operation='pop'}">
+              <tag when="{not(/a-side/rewrite-pop-action='none')}">
+                <pop>{/a-side/rewrite-pop-action}</pop>
+                <mode>symmetric</mode>
+              </tag>
+            </ingress>
+          </rewrite>
+        </GigabitEthernet>
+      </GigabitEthernet-subinterface>
+<!-- ios-xr a-side main interface TenGigE -->
+      <TenGigE when="{$interface-type-a-side='TenGigE'}">
+        <id>{$interface-number-a-side}</id>
+        <!--description tags="delete"/-->
+        <description when="{not(/a-side/new-if-description-TenGigE='')}">{/a-side/new-if-description-TenGigE}</description>
+		<mtu>9014</mtu>
+        <ipv4 tags="delete"/>
+        <proxy-arp tags="delete"/>
+        <transceiver>
+          <permit>
+            <pid>
+              <all/>
+            </pid>
+          </permit>
+        </transceiver>
+		<ethernet when="{$eoam-a-side='yes'}">
+          <oam>
+            <action>
+              <wiring-conflict>disable</wiring-conflict>
+            </action>
+          </oam>
+        </ethernet>
+        <ethernet when="{$eoam-a-side='no'}">
+          <oam tags="delete"/>
+        </ethernet>
+        <shutdown tags="delete"/>
+      </TenGigE>
+<!-- ios-xr a-side subinterfaces TenGigE -->
+      <TenGigE-subinterface when="{$interface-type-a-side='TenGigE'}">
+<!-- ios-xr a-side subinterface TenGigE.90 -->
+        <TenGigE when="{not(/a-side/cpe='none')}">
+          <id>{$interface-number-a-side}.90</id>
+          <mode>l2transport</mode>
+          <encapsulation>
+            <dot1q>
+              <vlan-id>90</vlan-id>
+            </dot1q>
+          </encapsulation>
+          <rewrite>
+            <ingress>
+              <tag>
+                <pop>1</pop>
+                <mode>symmetric</mode>
+              </tag>
+            </ingress>
+          </rewrite>
+        </TenGigE>
+<!-- ios-xr a-side subinterface TenGigE.efp-id -->
+        <TenGigE>
+          <id tags="create">{$interface-number-a-side}.{/a-side/efp-id}</id>
+          <mode>l2transport</mode>
+          <description>{string(/name)} {/a-side/efp-description}</description>
+          <encapsulation when="{/a-side/encapsulation='default'}">
+            <default/>
+          </encapsulation>
+          <encapsulation when="{/a-side/encapsulation='dot1q'}">
+            <dot1q>
+              <vlan-id>{/a-side/outer-vlan-id}</vlan-id>
+            </dot1q>
+          </encapsulation>
+          <encapsulation when="{/a-side/encapsulation='untagged'}">
+            <untagged/>
+          </encapsulation>
+          <service-policy when="{string(/product/product-name)='Standard'}">
+            <input>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+            </input>
+            <output>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+            </output>
+          </service-policy>
+          <service-policy when="{string(/product/product-name)='Voice'}">
+            <input>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+            </input>
+            <output>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+            </output>
+          </service-policy>
+          <ethernet-services when="{$l2tpacl-a-side='yes'}">
+            <access-group>
+              <direction>egress</direction>
+              <name>BLOCK_TUNNEL</name>
+            </access-group>
+          </ethernet-services>
+          <rewrite when="{/a-side/encapsulation='dot1q'}">
+            <ingress when="{/a-side/vlan-tag-operation='pop'}">
+              <tag when="{not(/a-side/rewrite-pop-action='none')}">
+                <pop>{/a-side/rewrite-pop-action}</pop>
+                <mode>symmetric</mode>
+              </tag>
+            </ingress>
+          </rewrite>
+        </TenGigE>
+      </TenGigE-subinterface>
+<!-- ios-xr a-side main interface Bundle-Ether -->
+      <Bundle-Ether when="{$interface-type-a-side='Bundle-Ether'}">
+        <id>{$interface-number-a-side}</id>
+        <!--description tags="delete"/-->
+        <description when="{not(/a-side/new-if-description-Bundle='')}">{/a-side/new-if-description-Bundle}</description>
+		<mtu>9014</mtu>
+        <ipv4 tags="delete"/>
+        <proxy-arp tags="delete"/>
+        <shutdown tags="delete"/>
+      </Bundle-Ether>
+<!-- ios-xr a-side subinterfaces Bundle-Ether -->
+      <Bundle-Ether-subinterface when="{$interface-type-a-side='Bundle-Ether'}">
+<!-- ios-xr a-side subinterface Bundle-Ether.90 -->
+        <Bundle-Ether when="{not(/a-side/cpe='none')}">
+          <id>{$interface-number-a-side}.90</id>
+          <mode>l2transport</mode>
+          <encapsulation>
+            <dot1q>
+              <vlan-id>90</vlan-id>
+            </dot1q>
+          </encapsulation>
+          <rewrite>
+            <ingress>
+              <tag>
+                <pop>1</pop>
+                <mode>symmetric</mode>
+              </tag>
+            </ingress>
+          </rewrite>
+        </Bundle-Ether>
+<!-- ios-xr a-side subinterface Bundle-Ether.efp-id -->
+        <Bundle-Ether>
+          <id tags="create">{$interface-number-a-side}.{/a-side/efp-id}</id>
+          <mode>l2transport</mode>
+          <description>{string(/name)} {/a-side/efp-description}</description>
+          <encapsulation when="{/a-side/encapsulation='default'}">
+            <default/>
+          </encapsulation>
+          <encapsulation when="{/a-side/encapsulation='dot1q'}">
+            <dot1q>
+              <vlan-id>{/a-side/outer-vlan-id}</vlan-id>
+            </dot1q>
+          </encapsulation>
+          <encapsulation when="{/a-side/encapsulation='untagged'}">
+            <untagged/>
+          </encapsulation>
+          <service-policy when="{string(/product/product-name)='Standard'}">
+            <input>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+            </input>
+            <output>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+            </output>
+          </service-policy>
+          <service-policy when="{string(/product/product-name)='Voice'}">
+            <input>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+            </input>
+            <output>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+            </output>
+          </service-policy>
+          <ethernet-services when="{$l2tpacl-a-side='yes'}">
+            <access-group>
+              <direction>egress</direction>
+              <name>BLOCK_TUNNEL</name>
+            </access-group>
+          </ethernet-services>
+          <rewrite when="{/a-side/encapsulation='dot1q'}">
+            <ingress when="{/a-side/vlan-tag-operation='pop'}">
+              <tag when="{not(/a-side/rewrite-pop-action='none')}">
+                <pop>{/a-side/rewrite-pop-action}</pop>
+                <mode>symmetric</mode>
+              </tag>
+            </ingress>
+          </rewrite>
+        </Bundle-Ether>
+      </Bundle-Ether-subinterface>
+      </interface>
+<!-- ios a-side interface GigabitEthernet -->
+      <interface xmlns="urn:ios">
+        <GigabitEthernet when="{$interface-type-a-side='GigabitEthernet'}">
+          <name>{$interface-number-a-side}</name>
+          <!--description tags="delete"/-->
+		  <description when="{not(/a-side/new-if-description-Ge='')}">{/a-side/new-if-description-Ge}</description>
+          <switchport when="{$platform-a-side='ME-3600X'}">
+            <mode>
+              <trunk/>
+            </mode>
+            <trunk>
+              <allowed>
+                <vlan>
+                  <none/>
+                </vlan>
+              </allowed>
+            </trunk>
+          </switchport>
+          <ethernet when="{$eoam-a-side='yes'}">
+            <oam/>
+          </ethernet>
+          <ethernet when="{$eoam-a-side='no'}">
+            <oam tags="delete"/>
+          </ethernet>
+          <service>
+            <instance when="{not(/a-side/cpe='none')}">
+              <id>90</id>
+              <ethernet/>
+              <encapsulation>
+                <dot1q>
+                  <id>90</id>
+                </dot1q>
+              </encapsulation>
+              <rewrite>
+                <ingress>
+                  <tag>
+                    <pop>1</pop>
+                    <mode>symmetric</mode>
+                  </tag>
+                </ingress>
+              </rewrite>
+              <bridge-domain>
+                <bridge-id>90</bridge-id>
+              </bridge-domain>
+            </instance>
+            <instance>
+              <id tags="create">{/a-side/efp-id}</id>
+              <ethernet/>
+              <description>{string(/name)} {/a-side/efp-description}</description>
+              <encapsulation when="{/a-side/encapsulation='default'}">
+                <default/>
+              </encapsulation>
+              <encapsulation when="{/a-side/encapsulation='dot1q'}">
+                <dot1q>
+                  <id>{/a-side/outer-vlan-id}</id>
+                </dot1q>
+              </encapsulation>
+              <encapsulation when="{/a-side/encapsulation='untagged'}">
+                <untagged/>
+              </encapsulation>
+              <rewrite when="{/a-side/encapsulation='dot1q'}">
+                <ingress when="{/a-side/vlan-tag-operation='pop'}">
+                  <tag when="{not(/a-side/rewrite-pop-action='none')}">
+                    <pop>{/a-side/rewrite-pop-action}</pop>
+                    <mode>symmetric</mode>
+                  </tag>
+                </ingress>
+              </rewrite>
+              <l2protocol>
+                <forward>
+                </forward>
+              </l2protocol>
+              <service-policy when="{string(/product/product-name)='Standard'}">
+                <input>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+                </input>
+                <output>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+                </output>
+              </service-policy>
+              <service-policy when="{string(/product/product-name)='Voice'}">
+                <input>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+                </input>
+                <output>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+                </output>
+              </service-policy>
+            </instance>
+          </service>
+          <mtu>9000</mtu>
+          <negotiation when="{not($platform-a-side='ME-3600X')}">
+            <auto when="{$negauto-a-side='yes'}">true</auto>
+            <auto when="{$negauto-a-side='no'}">false</auto>
+          </negotiation>
+          <speed when="{$platform-a-side='ME-3600X' and $negauto-a-side='yes'}" tags="delete"/>
+          <speed when="{$platform-a-side='ME-3600X' and $negauto-a-side='no'}">nonegotiate</speed>
+          <shutdown tags="delete"/>
+        </GigabitEthernet>
+<!-- ios a-side interface TenGigabitEthernet -->
+        <TenGigabitEthernet when="{$interface-type-a-side='TenGigabitEthernet'}">
+          <name>{$interface-number-a-side}</name>
+          <!--description tags="delete"/-->
+		  <description when="{not(/a-side/new-if-description-Te='')}">{/a-side/new-if-description-Te}</description>
+          <switchport when="{$platform-a-side='ME-3600X'}">
+            <mode>
+              <trunk/>
+            </mode>
+            <trunk>
+              <allowed>
+                <vlan>
+                  <none/>
+                </vlan>
+              </allowed>
+            </trunk>
+          </switchport>
+          <ethernet when="{$eoam-a-side='yes'}">
+            <oam/>
+          </ethernet>
+          <ethernet when="{$eoam-a-side='no'}">
+            <oam tags="delete"/>
+          </ethernet>
+          <service>
+            <instance when="{not(/a-side/cpe='none')}">
+              <id>90</id>
+              <ethernet/>
+              <encapsulation>
+                <dot1q>
+                  <id>90</id>
+                </dot1q>
+              </encapsulation>
+              <rewrite>
+                <ingress>
+                  <tag>
+                    <pop>1</pop>
+                    <mode>symmetric</mode>
+                  </tag>
+                </ingress>
+              </rewrite>
+              <bridge-domain>
+                <bridge-id>90</bridge-id>
+              </bridge-domain>
+            </instance>
+            <instance>
+              <id tags="create">{/a-side/efp-id}</id>
+              <ethernet/>
+              <description>{string(/name)} {/a-side/efp-description}</description>
+              <encapsulation when="{/a-side/encapsulation='default'}">
+                <default/>
+              </encapsulation>
+              <encapsulation when="{/a-side/encapsulation='dot1q'}">
+                <dot1q>
+                  <id>{/a-side/outer-vlan-id}</id>
+                </dot1q>
+              </encapsulation>
+              <encapsulation when="{/a-side/encapsulation='untagged'}">
+                <untagged/>
+              </encapsulation>
+              <rewrite when="{/a-side/encapsulation='dot1q'}">
+                <ingress when="{/a-side/vlan-tag-operation='pop'}">
+                  <tag when="{not(/a-side/rewrite-pop-action='none')}">
+                    <pop>{/a-side/rewrite-pop-action}</pop>
+                    <mode>symmetric</mode>
+                  </tag>
+                </ingress>
+              </rewrite>
+              <l2protocol>
+                <forward>
+                </forward>
+              </l2protocol>
+              <service-policy when="{string(/product/product-name)='Standard'}">
+                <input>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+                </input>
+                <output>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+                </output>
+              </service-policy>
+              <service-policy when="{string(/product/product-name)='Voice'}">
+                <input>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+                </input>
+                <output>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+                </output>
+              </service-policy>
+            </instance>
+          </service>
+          <mtu>9000</mtu>
+          <shutdown tags="delete"/>
+        </TenGigabitEthernet>
+<!-- ios a-side interface Port-channel -->
+        <Port-channel when="{$interface-type-a-side='Port-channel'}">
+          <name>{$interface-number-a-side}</name>
+          <!--description tags="delete"/-->
+		  <description when="{not(/a-side/new-if-description-Port-channel='')}">{/a-side/new-if-description-Port-channel}</description>
+          <switchport when="{$platform-a-side='ME-3600X'}">
+            <mode>
+              <trunk/>
+            </mode>
+            <trunk>
+              <allowed>
+                <vlan>
+                  <none/>
+                </vlan>
+              </allowed>
+            </trunk>
+          </switchport>
+          <service>
+            <instance when="{not(/a-side/cpe='none')}">
+              <id>90</id>
+              <ethernet/>
+              <encapsulation>
+                <dot1q>
+                  <id>90</id>
+                </dot1q>
+              </encapsulation>
+              <rewrite>
+                <ingress>
+                  <tag>
+                    <pop>1</pop>
+                    <mode>symmetric</mode>
+                  </tag>
+                </ingress>
+              </rewrite>
+              <bridge-domain>
+                <bridge-id>90</bridge-id>
+              </bridge-domain>
+            </instance>
+            <instance>
+              <id tags="create">{/a-side/efp-id}</id>
+              <ethernet/>
+              <description>{string(/name)} {/a-side/efp-description}</description>
+              <encapsulation when="{/a-side/encapsulation='default'}">
+                <default/>
+              </encapsulation>
+              <encapsulation when="{/a-side/encapsulation='dot1q'}">
+                <dot1q>
+                  <id>{/a-side/outer-vlan-id}</id>
+                </dot1q>
+              </encapsulation>
+              <encapsulation when="{/a-side/encapsulation='untagged'}">
+                <untagged/>
+              </encapsulation>
+              <rewrite when="{/a-side/encapsulation='dot1q'}">
+                <ingress when="{/a-side/vlan-tag-operation='pop'}">
+                  <tag when="{not(/a-side/rewrite-pop-action='none')}">
+                    <pop>{/a-side/rewrite-pop-action}</pop>
+                    <mode>symmetric</mode>
+                  </tag>
+                </ingress>
+              </rewrite>
+              <l2protocol>
+                <forward>
+                </forward>
+              </l2protocol>
+              <service-policy when="{string(/product/product-name)='Standard'}">
+                <input>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+                </input>
+                <output>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+                </output>
+              </service-policy>
+              <service-policy when="{string(/product/product-name)='Voice'}">
+                <input>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+                </input>
+                <output>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+                </output>
+              </service-policy>
+            </instance>
+          </service>
+          <mtu>9000</mtu>
+          <shutdown tags="delete"/>
+        </Port-channel>
+      </interface>
+<!-- ios-xr a-side l2vpn -->
+      <l2vpn xmlns="http://tail-f.com/ned/cisco-ios-xr">
+<!-- ios-xr a-side bridge-group & bridge-domain MGMT -->
+        <bridge when="{not(/a-side/cpe='none')}">
+          <group>
+            <group-name>MGMT</group-name>
+            <bridge-domain>
+              <bridge-domain-name>MGMT</bridge-domain-name>
+              <interface>
+                <name>{$interface-a-side}.90</name>
+              </interface>
+            </bridge-domain>
+          </group>
+		 </bridge>
+ <!-- ios-xr a-side p2p xconnect -->
+       <xconnect>
+       <group>
+         <name>{/a-side/xconnect-group-name}</name>
+ <!-- ios-xr a-side p2p xconnect  // z-side = IOS-XR -->
+		 <p2p when="{$os-z-side='ios-xr'}">
+           <name tags="create">{/name}</name>
+		   <interface>
+             <name>{$interface-a-side}.{/a-side/efp-id}</name>
+           </interface>
+           <neighbor>
+             <address>{deref(/z-side/device)/../config/cisco-ios-xr:interface/Loopback[id='1']/ipv4/address/ip}</address>
+             <pw-id>{$vc-derived}</pw-id>
+             <ip-version>ipv4</ip-version>
+<!-- ios-xr a-side p2p xconnect  // z-side = IOS-XR // z2-side = IOS-XR -->
+		     <backup when="{/backup-vc='yes'}" when="{$os-z2-side='ios-xr'}">
+                <neighbor>
+					<address>{deref(/z2-side/device)/../config/cisco-ios-xr:interface/Loopback[id='1']/ipv4/address/ip}</address>
+					<pw-id>{$vc-backup-derived}</pw-id>
+                </neighbor>
+             </backup>
+<!-- ios-xr a-side p2p xconnect  // z-side = IOS-XR // z2-side = IOS -->
+			 <backup when="{/backup-vc='yes'}" when="{$os-z2-side='ios'}">
+                <neighbor>
+					<address>{deref(/z2-side/device)/../config/ios:interface/Loopback[name='1']/ip/address/primary/address}</address>
+					<pw-id>{$vc-backup-derived}</pw-id>
+                </neighbor>
+             </backup>
+		   </neighbor>
+         </p2p>
+<!-- ios-xr a-side p2p xconnect  // z-side = IOS -->
+		 <p2p when="{$os-z-side='ios'}">
+           <name tags="create">{/name}</name>
+		   <interface>
+             <name>{$interface-a-side}.{/a-side/efp-id}</name>
+           </interface>
+           <neighbor>
+             <address>{deref(/z-side/device)/../config/ios:interface/Loopback[name='1']/ip/address/primary/address}</address>
+             <pw-id>{$vc-derived}</pw-id>
+             <ip-version>ipv4</ip-version>
+<!-- ios-xr a-side p2p xconnect  // z-side = IOS // z2-side = IOS-XR -->
+		   <backup when="{/backup-vc='yes'}" when="{$os-z2-side='ios-xr'}">
+                <neighbor>
+					<address>{deref(/z2-side/device)/../config/cisco-ios-xr:interface/Loopback[id='1']/ipv4/address/ip}</address>
+					<pw-id>{$vc-backup-derived}</pw-id>
+                </neighbor>
+             </backup>
+<!-- ios-xr a-side p2p xconnect  // z-side = IOS // z2-side = IOS -->
+			 <backup when="{/backup-vc='yes'}" when="{$os-z2-side='ios'}">
+                <neighbor>
+					<address>{deref(/z2-side/device)/../config/ios:interface/Loopback[name='1']/ip/address/primary/address}</address>
+					<pw-id>{$vc-backup-derived}</pw-id>
+                </neighbor>
+           </backup>
+		  </neighbor>
+         </p2p>
+       </group>
+       </xconnect>
+      </l2vpn>
+ <!-- ios a-side p2p xconnect -->
+	  <interface xmlns="urn:ios">
+        <GigabitEthernet when="{$interface-type-a-side='GigabitEthernet'}">
+          <name>{$interface-number-a-side}</name>
+		  <service>
+		  <instance>
+              <id>{/a-side/efp-id}</id>
+<!-- ios a-side p2p xconnect  // z-side = IOS-XR -->
+			  <xconnect when="{$os-z-side='ios-xr'}">
+                <address>{deref(/z-side/device)/../config/cisco-ios-xr:interface/Loopback[id='1']/ipv4/address/ip}</address>
+                <vcid>{$vc-derived}</vcid>
+                <encapsulation>mpls</encapsulation>
+<!-- ios a-side p2p xconnect  // z-side = IOS-XR // z2-side = IOS-XR -->
+				<backup when="{/backup-vc='yes'}" when="{$os-z2-side='ios-xr'}">
+                  <peer>
+                    <peer-router-ip-addr>{deref(/z2-side/device)/../config/cisco-ios-xr:interface/Loopback[id='1']/ipv4/address/ip}</peer-router-ip-addr>
+                    <vcid>{$vc-backup-derived}</vcid>
+                  </peer>
+                </backup >
+<!-- ios a-side p2p xconnect  // z-side = IOS-XR // z2-side = IOS -->
+				<backup when="{/backup-vc='yes'}" when="{$os-z2-side='ios'}">
+                  <peer>
+                    <peer-router-ip-addr>{deref(/z2-side/device)/../config/ios:interface/Loopback[name='1']/ip/address/primary/address}</peer-router-ip-addr>
+                    <vcid>{$vc-backup-derived}</vcid>
+                  </peer>
+                </backup >
+              </xconnect>
+<!-- ios a-side p2p xconnect  // z-side = IOS -->
+			  <xconnect when="{$os-z-side='ios'}">
+                <address>{deref(/z-side/device)/../config/ios:interface/Loopback[name='1']/ip/address/primary/address}</address>
+                <vcid>{$vc-derived}</vcid>
+                <encapsulation>mpls</encapsulation>
+<!-- ios a-side p2p xconnect  // z-side = IOS // z2-side = IOS-XR -->
+				<backup when="{/backup-vc='yes'}" when="{$os-z2-side='ios-xr'}">
+                  <peer>
+                    <peer-router-ip-addr>{deref(/z2-side/device)/../config/cisco-ios-xr:interface/Loopback[id='1']/ipv4/address/ip}</peer-router-ip-addr>
+                    <vcid>{$vc-backup-derived}</vcid>
+                  </peer>
+                </backup >
+<!-- ios a-side p2p xconnect  // z-side = IOS // z2-side = IOS -->
+				<backup when="{/backup-vc='yes'}" when="{$os-z2-side='ios'}">
+                  <peer>
+                    <peer-router-ip-addr>{deref(/z2-side/device)/../config/ios:interface/Loopback[name='1']/ip/address/primary/address}</peer-router-ip-addr>
+                    <vcid>{$vc-backup-derived}</vcid>
+                  </peer>
+                </backup>				
+            </xconnect>	  
+        </instance>
+	  </service>
+	  </GigabitEthernet>
+	  <TenGigabitEthernet when="{$interface-type-a-side='TenGigabitEthernet'}">
+         <name>{$interface-number-a-side}</name>
+		 <service>
+		  <instance>
+              <id>{/a-side/efp-id}</id>
+<!-- ios a-side p2p xconnect  // z-side = IOS-XR -->
+			  <xconnect when="{$os-z-side='ios-xr'}">
+                <address>{deref(/z-side/device)/../config/cisco-ios-xr:interface/Loopback[id='1']/ipv4/address/ip}</address>
+                <vcid>{$vc-derived}</vcid>
+                <encapsulation>mpls</encapsulation>
+<!-- ios a-side p2p xconnect  // z-side = IOS-XR // z2-side = IOS-XR -->
+				<backup when="{/backup-vc='yes'}" when="{$os-z2-side='ios-xr'}">
+                  <peer>
+                    <peer-router-ip-addr>deref(/z2-side/device)/../config/cisco-ios-xr:interface/Loopback[id='1']/ipv4/address/ip}</peer-router-ip-addr>
+                    <vcid>{$vc-backup-derived}</vcid>
+                  </peer>
+                </backup >
+<!-- ios a-side p2p xconnect  // z-side = IOS-XR // z2-side = IOS -->
+				<backup when="{/backup-vc='yes'}" when="{$os-z2-side='ios'}">
+                  <peer>
+                    <peer-router-ip-addr>{deref(/z2-side/device)/../config/ios:interface/Loopback[name='1']/ip/address/primary/address</peer-router-ip-addr>
+                    <vcid>{$vc-backup-derived}</vcid>
+                  </peer>
+                </backup >
+              </xconnect>
+<!-- ios a-side p2p xconnect  // z-side = IOS -->
+			  <xconnect when="{$os-z-side='ios'}">
+                <address>{deref(/z-side/device)/../config/ios:interface/Loopback[name='1']/ip/address/primary/address}</address>
+                <vcid>{$vc-derived}</vcid>
+                <encapsulation>mpls</encapsulation>
+<!-- ios a-side p2p xconnect  // z-side = IOS // z2-side = IOS-XR -->
+				<backup when="{/backup-vc='yes'}" when="{$os-z2-side='ios-xr'}">
+                  <peer>
+                    <peer-router-ip-addr>deref(/z2-side/device)/../config/cisco-ios-xr:interface/Loopback[id='1']/ipv4/address/ip}</peer-router-ip-addr>
+                    <vcid>{$vc-backup-derived}</vcid>
+                  </peer>
+                </backup >
+<!-- ios a-side p2p xconnect  // z-side = IOS // z2-side = IOS -->
+				<backup when="{/backup-vc='yes'}" when="{$os-z2-side='ios'}">
+                  <peer>
+                    <peer-router-ip-addr>{deref(/z2-side/device)/../config/ios:interface/Loopback[name='1']/ip/address/primary/address</peer-router-ip-addr>
+                    <vcid>{$vc-backup-derived}</vcid>
+                  </peer>
+                </backup>				
+            </xconnect>	  
+        </instance>
+	  </service>
+	  </TenGigabitEthernet>
+	  <Port-channel when="{$interface-type-a-side='Port-channel'}">
+		  <name>{$interface-number-a-side}</name>
+		  <service>
+		  <instance>
+              <id>{/a-side/efp-id}</id>
+<!-- ios a-side p2p xconnect  // z-side = IOS-XR -->
+			  <xconnect when="{$os-z-side='ios-xr'}">
+                <address>{deref(/z-side/device)/../config/cisco-ios-xr:interface/Loopback[id='1']/ipv4/address/ip}</address>
+                <vcid>{$vc-derived}</vcid>
+                <encapsulation>mpls</encapsulation>
+<!-- ios a-side p2p xconnect  // z-side = IOS-XR // z2-side = IOS-XR -->
+				<backup when="{/backup-vc='yes'}" when="{$os-z2-side='ios-xr'}">
+                  <peer>
+                    <peer-router-ip-addr>deref(/z2-side/device)/../config/cisco-ios-xr:interface/Loopback[id='1']/ipv4/address/ip}</peer-router-ip-addr>
+                    <vcid>{$vc-backup-derived}</vcid>
+                  </peer>
+                </backup >
+<!-- ios a-side p2p xconnect  // z-side = IOS-XR // z2-side = IOS -->
+				<backup when="{/backup-vc='yes'}" when="{$os-z2-side='ios'}">
+                  <peer>
+                    <peer-router-ip-addr>{deref(/z2-side/device)/../config/ios:interface/Loopback[name='1']/ip/address/primary/address</peer-router-ip-addr>
+                    <vcid>{$vc-backup-derived}</vcid>
+                  </peer>
+                </backup >
+              </xconnect>
+<!-- ios a-side p2p xconnect  // z-side = IOS -->
+			  <xconnect when="{$os-z-side='ios'}">
+                <address>{deref(/z-side/device)/../config/ios:interface/Loopback[name='1']/ip/address/primary/address}</address>
+                <vcid>{$vc-derived}</vcid>
+                <encapsulation>mpls</encapsulation>
+<!-- ios a-side p2p xconnect  // z-side = IOS // z2-side = IOS-XR -->
+				<backup when="{/backup-vc='yes'}" when="{$os-z2-side='ios-xr'}">
+                  <peer>
+                    <peer-router-ip-addr>deref(/z2-side/device)/../config/cisco-ios-xr:interface/Loopback[id='1']/ipv4/address/ip}</peer-router-ip-addr>
+                    <vcid>{$vc-backup-derived}</vcid>
+                  </peer>
+                </backup >
+<!-- ios a-side p2p xconnect  // z-side = IOS // z2-side = IOS -->
+				<backup when="{/backup-vc='yes'}" when="{$os-z2-side='ios'}">
+                  <peer>
+                    <peer-router-ip-addr>{deref(/z2-side/device)/../config/ios:interface/Loopback[name='1']/ip/address/primary/address</peer-router-ip-addr>
+                    <vcid>{$vc-backup-derived}</vcid>
+                  </peer>
+                </backup>				
+            </xconnect>	  
+        </instance>
+	  </service>
+	  </Port-channel>
+	  </interface>
+	</config>
+  </device>
+<!-- z-side entry point -->
+  <device>
+    <name>{/z-side/device}</name>
+      <config>
+<!-- ios-xr z-side policy-map Standard egress -->
+      <policy-map xmlns="http://tail-f.com/ned/cisco-ios-xr" when="{string(/product/product-name)='Standard'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+        <class>
+          <class-default>
+            <map>class-default</map>
+            <police-rate-unit>
+              <police>
+                <rate>
+                  <cir>{$product-cir-kbps}</cir>
+                  <cir-unit>kbps</cir-unit>
+                  <burst>{$product-burst-kbyte}</burst>
+                  <burst-units>kbytes</burst-units>
+                  <conform-action>
+                    <transmit/>
+                  </conform-action>
+                </rate>
+              </police>
+            </police-rate-unit>
+          </class-default>
+        </class>
+      </policy-map>
+<!-- ios-xr z-side policy-map Voice egress -->
+      <policy-map xmlns="http://tail-f.com/ned/cisco-ios-xr" when="{string(/product/product-name)='Voice'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+        <class>
+          <class-default>
+            <map>class-default</map>
+            <police-rate-unit>
+              <police>
+                <rate>
+                  <cir>{$product-cir-kbps}</cir>
+                  <cir-unit>kbps</cir-unit>
+                  <burst>{$product-burst-kbyte}</burst>
+                  <burst-units>kbytes</burst-units>
+                  <conform-action>
+                    <transmit/>
+                  </conform-action>
+                </rate>
+              </police>
+            </police-rate-unit>
+          </class-default>
+        </class>
+      </policy-map>
+<!-- ios-xr z-side policy-map Standard ingress -->
+      <policy-map xmlns="http://tail-f.com/ned/cisco-ios-xr" when="{string(/product/product-name)='Standard'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+        <class>
+          <class-default>
+            <map>class-default</map>
+            <police-rate-unit>
+              <police>
+                <rate>
+                  <cir>{$product-cir-kbps}</cir>
+                  <cir-unit>kbps</cir-unit>
+                  <burst>{$product-burst-kbyte}</burst>
+                  <burst-units>kbytes</burst-units>
+                  <conform-action>
+                    <set>
+                      <mpls>
+                        <experimental>
+                          <topmost>2</topmost>
+                        </experimental>
+                      </mpls>
+                    </set>
+                  </conform-action>
+                </rate>
+              </police>
+            </police-rate-unit>
+          </class-default>
+        </class>
+      </policy-map>
+<!-- ios-xr z-side policy-map Voice ingress -->
+      <policy-map xmlns="http://tail-f.com/ned/cisco-ios-xr" when="{string(/product/product-name)='Voice'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+        <class>
+          <class-default>
+            <map>class-default</map>
+            <police-rate-unit>
+              <police>
+                <rate>
+                  <cir>{$product-cir-kbps}</cir>
+                  <cir-unit>kbps</cir-unit>
+                  <burst>{$product-burst-kbyte}</burst>
+                  <burst-units>kbytes</burst-units>
+                  <conform-action>
+                    <set>
+                      <mpls>
+                        <experimental>
+                          <topmost>5</topmost>
+                        </experimental>
+                      </mpls>
+                    </set>
+                  </conform-action>
+                </rate>
+              </police>
+            </police-rate-unit>
+          </class-default>
+        </class>
+      </policy-map>
+<!-- ios z-side policy-map Standard egress -->
+      <policy-map xmlns="urn:ios" when="{string(/product/product-name)='Standard'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-C-E</name>
+        <class-default>
+          <class>
+            <name>class-default</name>
+            <bandwidth>
+              <percent>100</percent>
+            </bandwidth>
+          </class>
+        </class-default>
+      </policy-map>
+      <policy-map xmlns="urn:ios" when="{string(/product/product-name)='Standard'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+        <class-default>
+          <class>
+            <name>class-default</name>
+            <shape>
+              <average>
+                <bit-rate>{$product-cir-bps}</bit-rate>
+              </average>
+            </shape>
+            <service-policy>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-C-E</service-policy>
+          </class>
+        </class-default>
+      </policy-map>
+<!-- ios z-side policy-map Voice egress -->
+      <policy-map xmlns="urn:ios" when="{string(/product/product-name)='Voice'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-C-E</name>
+        <class-default>
+          <class>
+            <name>class-default</name>
+            <bandwidth>
+              <percent>100</percent>
+            </bandwidth>
+          </class>
+        </class-default>
+      </policy-map>
+      <policy-map xmlns="urn:ios" when="{string(/product/product-name)='Voice'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+        <class-default>
+          <class>
+            <name>class-default</name>
+            <shape>
+              <average>
+                <bit-rate>{$product-cir-bps}</bit-rate>
+              </average>
+            </shape>
+            <service-policy>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-C-E</service-policy>
+          </class>
+        </class-default>
+      </policy-map>
+<!-- ios z-side policy-map Standard ingress -->
+      <policy-map xmlns="urn:ios" when="{string(/product/product-name)='Standard'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+        <class-default>
+          <class>
+            <name>class-default</name>
+            <police-policy-map>
+              <police>
+                <cir>{$product-cir-bps}</cir>
+                <bc>{$product-burst-byte}</bc>
+                <actions>
+                  <conform-set-mpls-exp-imposition-transmit>
+                    <conform-action>
+                      <set-mpls-exp-imposition-transmit>2</set-mpls-exp-imposition-transmit>
+                    </conform-action>
+                  </conform-set-mpls-exp-imposition-transmit>
+                </actions>
+              </police>
+            </police-policy-map>
+          </class>
+        </class-default>
+      </policy-map>
+<!-- ios z-side policy-map Voice ingress -->
+      <policy-map xmlns="urn:ios" when="{string(/product/product-name)='Voice'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+        <class-default>
+          <class>
+            <name>class-default</name>
+            <police-policy-map>
+              <police>
+                <cir>{$product-cir-bps}</cir>
+                <bc>{$product-burst-byte}</bc>
+                <actions>
+                  <conform-set-mpls-exp-imposition-transmit>
+                    <conform-action>
+                      <set-mpls-exp-imposition-transmit>5</set-mpls-exp-imposition-transmit>
+                    </conform-action>
+                  </conform-set-mpls-exp-imposition-transmit>
+                </actions>
+              </police>
+            </police-policy-map>
+          </class>
+        </class-default>
+      </policy-map>
+<!-- ios-xr z-side l2tp ethernet-services access-list -->
+      <ethernet-services xmlns="http://tail-f.com/ned/cisco-ios-xr" when="{$l2tpacl-z-side='yes'}">
+        <access-list>
+          <name>BLOCK_TUNNEL</name>
+          <rule>
+            <id>10</id>
+            <line>deny any host 0100.0ccd.cdd0</line>
+          </rule>
+          <rule>
+            <id>20</id>
+            <line>deny host 0100.0ccd.cdd0 any</line>
+          </rule>
+          <rule>
+            <id>30</id>
+            <line>permit any any</line>
+          </rule>
+        </access-list>
+      </ethernet-services>
+<!-- ios-xr z-side interfaces -->
+      <interface xmlns="http://tail-f.com/ned/cisco-ios-xr">
+<!-- ios-xr z-side main interface GigabitEthernet -->
+      <GigabitEthernet when="{$interface-type-z-side='GigabitEthernet'}">
+        <id>{$interface-number-z-side}</id>
+        <!--description tags="delete"/-->
+		<description when="{not(/z-side/new-if-description-Gigabit='')}">{/z-side/new-if-description-Gigabit}</description>
+        <mtu>9014</mtu>
+        <ipv4 tags="delete"/>
+        <proxy-arp tags="delete"/>
+        <transceiver>
+          <permit>
+            <pid>
+              <all/>
+            </pid>
+          </permit>
+        </transceiver>
+		<ethernet when="{$eoam-z-side='yes'}">
+          <oam>
+            <action>
+              <wiring-conflict>disable</wiring-conflict>
+            </action>
+          </oam>
+        </ethernet>
+        <ethernet when="{$eoam-z-side='no'}">
+          <oam tags="delete"/>
+        </ethernet>
+        <shutdown tags="delete"/>
+        <negotiation when="{$negauto-z-side='yes'}">
+          <auto/>
+        </negotiation>
+        <negotiation when="{$negauto-z-side='no'}">
+          <auto tags="delete"/>
+        </negotiation>
+      </GigabitEthernet>
+<!-- ios-xr z-side subinterfaces GigabitEthernet -->
+      <GigabitEthernet-subinterface when="{$interface-type-z-side='GigabitEthernet'}">
+<!-- ios-xr z-side subinterface GigabitEthernet.90 -->
+        <GigabitEthernet when="{not(/z-side/cpe='none')}">
+          <id>{$interface-number-z-side}.90</id>
+          <mode>l2transport</mode>
+          <encapsulation>
+            <dot1q>
+              <vlan-id>90</vlan-id>
+            </dot1q>
+          </encapsulation>
+          <rewrite>
+            <ingress>
+              <tag>
+                <pop>1</pop>
+                <mode>symmetric</mode>
+              </tag>
+            </ingress>
+          </rewrite>
+        </GigabitEthernet>
+<!-- ios-xr z-side subinterface GigabitEthernet.efp-id -->
+        <GigabitEthernet>
+          <id tags="create">{$interface-number-z-side}.{/z-side/efp-id}</id>
+          <mode>l2transport</mode>
+          <description>{string(/name)} {/z-side/efp-description}</description>
+          <encapsulation when="{/z-side/encapsulation='default'}">
+            <default/>
+          </encapsulation>
+          <encapsulation when="{/z-side/encapsulation='dot1q'}">
+            <dot1q>
+              <vlan-id>{/z-side/outer-vlan-id}</vlan-id>
+            </dot1q>
+          </encapsulation>
+          <encapsulation when="{/z-side/encapsulation='untagged'}">
+            <untagged/>
+          </encapsulation>
+          <service-policy when="{string(/product/product-name)='Standard'}">
+            <input>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+            </input>
+            <output>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+            </output>
+          </service-policy>
+          <service-policy when="{string(/product/product-name)='Voice'}">
+            <input>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+            </input>
+            <output>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+            </output>
+          </service-policy>
+          <ethernet-services when="{$l2tpacl-z-side='yes'}">
+            <access-group>
+              <direction>egress</direction>
+              <name>BLOCK_TUNNEL</name>
+            </access-group>
+          </ethernet-services>
+          <rewrite when="{/z-side/encapsulation='dot1q'}">
+            <ingress when="{/z-side/vlan-tag-operation='pop'}">
+              <tag when="{not(/z-side/rewrite-pop-action='none')}">
+                <pop>{/z-side/rewrite-pop-action}</pop>
+                <mode>symmetric</mode>
+              </tag>
+            </ingress>
+          </rewrite>
+        </GigabitEthernet>
+      </GigabitEthernet-subinterface>
+<!-- ios-xr z-side main interface TenGigE -->
+      <TenGigE when="{$interface-type-z-side='TenGigE'}">
+        <id>{$interface-number-z-side}</id>
+        <!--description tags="delete"/-->
+		<description when="{not(/z-side/new-if-description-TenGigE='')}">{/z-side/new-if-description-TenGigE}</description>
+        <mtu>9014</mtu>
+        <ipv4 tags="delete"/>
+        <proxy-arp tags="delete"/>
+        <transceiver>
+          <permit>
+            <pid>
+              <all/>
+            </pid>
+          </permit>
+        </transceiver>
+		<ethernet when="{$eoam-z-side='yes'}">
+          <oam>
+            <action>
+              <wiring-conflict>disable</wiring-conflict>
+            </action>
+          </oam>
+        </ethernet>
+        <ethernet when="{$eoam-z-side='no'}">
+          <oam tags="delete"/>
+        </ethernet>
+        <shutdown tags="delete"/>
+      </TenGigE>
+<!-- ios-xr z-side subinterfaces TenGigE -->
+      <TenGigE-subinterface when="{$interface-type-z-side='TenGigE'}">
+<!-- ios-xr z-side subinterface TenGigE.90 -->
+        <TenGigE when="{not(/z-side/cpe='none')}">
+          <id>{$interface-number-z-side}.90</id>
+          <mode>l2transport</mode>
+          <encapsulation>
+            <dot1q>
+              <vlan-id>90</vlan-id>
+            </dot1q>
+          </encapsulation>
+          <rewrite>
+            <ingress>
+              <tag>
+                <pop>1</pop>
+                <mode>symmetric</mode>
+              </tag>
+            </ingress>
+          </rewrite>
+        </TenGigE>
+<!-- ios-xr z-side subinterface TenGigE.efp-id -->
+        <TenGigE>
+          <id tags="create">{$interface-number-z-side}.{/z-side/efp-id}</id>
+          <mode>l2transport</mode>
+          <description>{string(/name)} {/z-side/efp-description}</description>
+          <encapsulation when="{/z-side/encapsulation='default'}">
+            <default/>
+          </encapsulation>
+          <encapsulation when="{/z-side/encapsulation='dot1q'}">
+            <dot1q>
+              <vlan-id>{/z-side/outer-vlan-id}</vlan-id>
+            </dot1q>
+          </encapsulation>
+          <encapsulation when="{/z-side/encapsulation='untagged'}">
+            <untagged/>
+          </encapsulation>
+          <service-policy when="{string(/product/product-name)='Standard'}">
+            <input>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+            </input>
+            <output>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+            </output>
+          </service-policy>
+          <service-policy when="{string(/product/product-name)='Voice'}">
+            <input>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+            </input>
+            <output>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+            </output>
+          </service-policy>
+          <ethernet-services when="{$l2tpacl-z-side='yes'}">
+            <access-group>
+              <direction>egress</direction>
+              <name>BLOCK_TUNNEL</name>
+            </access-group>
+          </ethernet-services>
+          <rewrite when="{/z-side/encapsulation='dot1q'}">
+            <ingress when="{/z-side/vlan-tag-operation='pop'}">
+              <tag when="{not(/z-side/rewrite-pop-action='none')}">
+                <pop>{/z-side/rewrite-pop-action}</pop>
+                <mode>symmetric</mode>
+              </tag>
+            </ingress>
+          </rewrite>
+        </TenGigE>
+      </TenGigE-subinterface>
+<!-- ios-xr z-side main interface Bundle-Ether -->
+      <Bundle-Ether when="{$interface-type-z-side='Bundle-Ether'}">
+        <id>{$interface-number-z-side}</id>
+        <!--description tags="delete"/-->
+		<description when="{not(/z-side/new-if-description-Bundle='')}">{/z-side/new-if-description-Bundle}</description>
+        <mtu>9014</mtu>
+        <ipv4 tags="delete"/>
+        <proxy-arp tags="delete"/>
+        <shutdown tags="delete"/>
+      </Bundle-Ether>
+<!-- ios-xr z-side subinterfaces Bundle-Ether -->
+      <Bundle-Ether-subinterface when="{$interface-type-z-side='Bundle-Ether'}">
+<!-- ios-xr z-side subinterface Bundle-Ether.90 -->
+        <Bundle-Ether when="{not(/z-side/cpe='none')}">
+          <id>{$interface-number-z-side}.90</id>
+          <mode>l2transport</mode>
+          <encapsulation>
+            <dot1q>
+              <vlan-id>90</vlan-id>
+            </dot1q>
+          </encapsulation>
+          <rewrite>
+            <ingress>
+              <tag>
+                <pop>1</pop>
+                <mode>symmetric</mode>
+              </tag>
+            </ingress>
+          </rewrite>
+        </Bundle-Ether>
+<!-- ios-xr z-side subinterface Bundle-Ether.efp-id -->
+        <Bundle-Ether>
+          <id tags="create">{$interface-number-z-side}.{/z-side/efp-id}</id>
+          <mode>l2transport</mode>
+          <description>{string(/name)} {/z-side/efp-description}</description>
+          <encapsulation when="{/z-side/encapsulation='default'}">
+            <default/>
+          </encapsulation>
+          <encapsulation when="{/z-side/encapsulation='dot1q'}">
+            <dot1q>
+              <vlan-id>{/z-side/outer-vlan-id}</vlan-id>
+            </dot1q>
+          </encapsulation>
+          <encapsulation when="{/z-side/encapsulation='untagged'}">
+            <untagged/>
+          </encapsulation>
+          <service-policy when="{string(/product/product-name)='Standard'}">
+            <input>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+            </input>
+            <output>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+            </output>
+          </service-policy>
+          <service-policy when="{string(/product/product-name)='Voice'}">
+            <input>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+            </input>
+            <output>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+            </output>
+          </service-policy>
+          <ethernet-services when="{$l2tpacl-z-side='yes'}">
+            <access-group>
+              <direction>egress</direction>
+              <name>BLOCK_TUNNEL</name>
+            </access-group>
+          </ethernet-services>
+          <rewrite when="{/z-side/encapsulation='dot1q'}">
+            <ingress when="{/z-side/vlan-tag-operation='pop'}">
+              <tag when="{not(/z-side/rewrite-pop-action='none')}">
+                <pop>{/z-side/rewrite-pop-action}</pop>
+                <mode>symmetric</mode>
+              </tag>
+            </ingress>
+          </rewrite>
+        </Bundle-Ether>
+      </Bundle-Ether-subinterface>
+      </interface>
+<!-- ios z-side interface GigabitEthernet -->
+      <interface xmlns="urn:ios">
+        <GigabitEthernet when="{$interface-type-z-side='GigabitEthernet'}">
+          <name>{$interface-number-z-side}</name>
+          <!--description tags="delete"/-->
+		  <description when="{not(/z-side/new-if-description-Ge='')}">{/z-side/new-if-description-Ge}</description>
+          <switchport when="{$platform-z-side='ME-3600X'}">
+            <mode>
+              <trunk/>
+            </mode>
+            <trunk>
+              <allowed>
+                <vlan>
+                  <none/>
+                </vlan>
+              </allowed>
+            </trunk>
+          </switchport>
+          <ethernet when="{$eoam-z-side='yes'}">
+            <oam/>
+          </ethernet>
+          <ethernet when="{$eoam-z-side='no'}">
+            <oam tags="delete"/>
+          </ethernet>
+          <service>
+            <instance when="{not(/z-side/cpe='none')}">
+              <id>90</id>
+              <ethernet/>
+              <encapsulation>
+                <dot1q>
+                  <id>90</id>
+                </dot1q>
+              </encapsulation>
+              <rewrite>
+                <ingress>
+                  <tag>
+                    <pop>1</pop>
+                    <mode>symmetric</mode>
+                  </tag>
+                </ingress>
+              </rewrite>
+              <bridge-domain>
+                <bridge-id>90</bridge-id>
+              </bridge-domain>
+            </instance>
+            <instance>
+              <id tags="create">{/z-side/efp-id}</id>
+              <ethernet/>
+              <description>{string(/name)} {/z-side/efp-description}</description>
+              <encapsulation when="{/z-side/encapsulation='default'}">
+                <default/>
+              </encapsulation>
+              <encapsulation when="{/z-side/encapsulation='dot1q'}">
+                <dot1q>
+                  <id>{/z-side/outer-vlan-id}</id>
+                </dot1q>
+              </encapsulation>
+              <encapsulation when="{/z-side/encapsulation='untagged'}">
+                <untagged/>
+              </encapsulation>
+              <rewrite when="{/z-side/encapsulation='dot1q'}">
+                <ingress when="{/z-side/vlan-tag-operation='pop'}">
+                  <tag when="{not(/z-side/rewrite-pop-action='none')}">
+                    <pop>{/z-side/rewrite-pop-action}</pop>
+                    <mode>symmetric</mode>
+                  </tag>
+                </ingress>
+              </rewrite>
+              <l2protocol>
+                <forward>
+                </forward>
+              </l2protocol>
+              <service-policy when="{string(/product/product-name)='Standard'}">
+                <input>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+                </input>
+                <output>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+                </output>
+              </service-policy>
+              <service-policy when="{string(/product/product-name)='Voice'}">
+                <input>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+                </input>
+                <output>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+                </output>
+              </service-policy>
+            </instance>
+          </service>
+          <mtu>9000</mtu>
+          <negotiation when="{not($platform-z-side='ME-3600X')}">
+            <auto when="{$negauto-z-side='yes'}">true</auto>
+            <auto when="{$negauto-z-side='no'}">false</auto>
+          </negotiation>
+          <speed when="{$platform-z-side='ME-3600X' and $negauto-z-side='yes'}" tags="delete"/>
+          <speed when="{$platform-z-side='ME-3600X' and $negauto-z-side='no'}">nonegotiate</speed>
+          <shutdown tags="delete"/>
+        </GigabitEthernet>
+<!-- ios z-side interface TenGigabitEthernet -->
+        <TenGigabitEthernet when="{$interface-type-z-side='TenGigabitEthernet'}">
+          <name>{$interface-number-z-side}</name>
+          <!--description tags="delete"/-->
+		  <description when="{not(/z-side/new-if-description-Te='')}">{/z-side/new-if-description-Te}</description>
+          <switchport when="{$platform-z-side='ME-3600X'}">
+            <mode>
+              <trunk/>
+            </mode>
+            <trunk>
+              <allowed>
+                <vlan>
+                  <none/>
+                </vlan>
+              </allowed>
+            </trunk>
+          </switchport>
+          <ethernet when="{$eoam-z-side='yes'}">
+            <oam/>
+          </ethernet>
+          <ethernet when="{$eoam-z-side='no'}">
+            <oam tags="delete"/>
+          </ethernet>
+          <service>
+            <instance when="{not(/z-side/cpe='none')}">
+              <id>90</id>
+              <ethernet/>
+              <encapsulation>
+                <dot1q>
+                  <id>90</id>
+                </dot1q>
+              </encapsulation>
+              <rewrite>
+                <ingress>
+                  <tag>
+                    <pop>1</pop>
+                    <mode>symmetric</mode>
+                  </tag>
+                </ingress>
+              </rewrite>
+              <bridge-domain>
+                <bridge-id>90</bridge-id>
+              </bridge-domain>
+            </instance>
+            <instance>
+              <id tags="create">{/z-side/efp-id}</id>
+              <ethernet/>
+              <description>{string(/name)} {/z-side/efp-description}</description>
+              <encapsulation when="{/z-side/encapsulation='default'}">
+                <default/>
+              </encapsulation>
+              <encapsulation when="{/z-side/encapsulation='dot1q'}">
+                <dot1q>
+                  <id>{/z-side/outer-vlan-id}</id>
+                </dot1q>
+              </encapsulation>
+              <encapsulation when="{/z-side/encapsulation='untagged'}">
+                <untagged/>
+              </encapsulation>
+              <rewrite when="{/z-side/encapsulation='dot1q'}">
+                <ingress when="{/z-side/vlan-tag-operation='pop'}">
+                  <tag when="{not(/z-side/rewrite-pop-action='none')}">
+                    <pop>{/z-side/rewrite-pop-action}</pop>
+                    <mode>symmetric</mode>
+                  </tag>
+                </ingress>
+              </rewrite>
+              <l2protocol>
+                <forward>
+                </forward>
+              </l2protocol>
+              <service-policy when="{string(/product/product-name)='Standard'}">
+                <input>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+                </input>
+                <output>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+                </output>
+              </service-policy>
+              <service-policy when="{string(/product/product-name)='Voice'}">
+                <input>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+                </input>
+                <output>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+                </output>
+              </service-policy>
+            </instance>
+          </service>
+          <mtu>9000</mtu>
+          <shutdown tags="delete"/>
+        </TenGigabitEthernet>
+<!-- ios z-side interface Port-channel -->
+        <Port-channel when="{$interface-type-z-side='Port-channel'}">
+          <name>{$interface-number-z-side}</name>
+          <!--description tags="delete"/-->
+		  <description when="{not(/z-side/new-if-description-Port-channel='')}">{/z-side/new-if-description-Port-channel}</description>
+          <switchport when="{$platform-z-side='ME-3600X'}">
+            <mode>
+              <trunk/>
+            </mode>
+            <trunk>
+              <allowed>
+                <vlan>
+                  <none/>
+                </vlan>
+              </allowed>
+            </trunk>
+          </switchport>
+          <service>
+            <instance when="{not(/z-side/cpe='none')}">
+              <id>90</id>
+              <ethernet/>
+              <encapsulation>
+                <dot1q>
+                  <id>90</id>
+                </dot1q>
+              </encapsulation>
+              <rewrite>
+                <ingress>
+                  <tag>
+                    <pop>1</pop>
+                    <mode>symmetric</mode>
+                  </tag>
+                </ingress>
+              </rewrite>
+              <bridge-domain>
+                <bridge-id>90</bridge-id>
+              </bridge-domain>
+            </instance>
+            <instance>
+              <id tags="create">{/z-side/efp-id}</id>
+              <ethernet/>
+              <description>{string(/name)} {/z-side/efp-description}</description>
+              <encapsulation when="{/z-side/encapsulation='default'}">
+                <default/>
+              </encapsulation>
+              <encapsulation when="{/z-side/encapsulation='dot1q'}">
+                <dot1q>
+                  <id>{/z-side/outer-vlan-id}</id>
+                </dot1q>
+              </encapsulation>
+              <encapsulation when="{/z-side/encapsulation='untagged'}">
+                <untagged/>
+              </encapsulation>
+              <rewrite when="{/z-side/encapsulation='dot1q'}">
+                <ingress when="{/z-side/vlan-tag-operation='pop'}">
+                  <tag when="{not(/z-side/rewrite-pop-action='none')}">
+                    <pop>{/z-side/rewrite-pop-action}</pop>
+                    <mode>symmetric</mode>
+                  </tag>
+                </ingress>
+              </rewrite>
+              <l2protocol>
+                <forward>
+                </forward>
+              </l2protocol>
+              <service-policy when="{string(/product/product-name)='Standard'}">
+                <input>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+                </input>
+                <output>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+                </output>
+              </service-policy>
+              <service-policy when="{string(/product/product-name)='Voice'}">
+                <input>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+                </input>
+                <output>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+                </output>
+              </service-policy>
+            </instance>
+          </service>
+          <mtu>9000</mtu>
+          <shutdown tags="delete"/>
+        </Port-channel>
+      </interface>
+<!-- ios-xr z-side l2vpn -->
+      <l2vpn xmlns="http://tail-f.com/ned/cisco-ios-xr">
+<!-- ios-xr z-side bridge-group & bridge-domain MGMT -->
+        <bridge when="{not(/z-side/cpe='none')}">
+          <group>
+            <group-name>MGMT</group-name>
+            <bridge-domain>
+              <bridge-domain-name>MGMT</bridge-domain-name>
+              <interface>
+                <name>{$interface-z-side}.90</name>
+              </interface>
+            </bridge-domain>
+          </group>
+		 </bridge>
+ <!-- ios-xr z-side p2p xconnect -->
+       <xconnect>
+       <group>
+         <name>{/z-side/xconnect-group-name}</name>
+ <!-- ios-xr z-side p2p xconnect  // a-side = IOS-XR -->
+		 <p2p when="{$os-a-side='ios-xr'}">
+           <name tags="create">{/name}</name>
+		   <interface>
+             <name>{$interface-z-side}.{/z-side/efp-id}</name>
+           </interface>
+           <neighbor>
+             <address>{deref(/a-side/device)/../config/cisco-ios-xr:interface/Loopback[id='1']/ipv4/address/ip}</address>
+             <pw-id>{$vc-derived}</pw-id>
+             <ip-version>ipv4</ip-version>
+		   </neighbor>
+         </p2p>
+<!-- ios-xr z-side p2p xconnect  // a-side = IOS -->
+		 <p2p when="{$os-a-side='ios'}">
+           <name tags="create">{/name}</name>
+		   <interface>
+             <name>{$interface-z-side}.{/z-side/efp-id}</name>
+           </interface>
+           <neighbor>
+             <address>{deref(/a-side/device)/../config/ios:interface/Loopback[name='1']/ip/address/primary/address}</address>
+             <pw-id>{$vc-derived}</pw-id>
+             <ip-version>ipv4</ip-version>
+		  </neighbor>
+         </p2p>
+       </group>
+       </xconnect>
+      </l2vpn>
+ <!-- ios z-side p2p xconnect -->
+	  <interface xmlns="urn:ios">
+        <GigabitEthernet when="{$interface-type-z-side='GigabitEthernet'}">
+          <name>{$interface-number-z-side}</name>
+		  <service>
+		  <instance>
+              <id>{/z-side/efp-id}</id>
+<!-- ios z-side p2p xconnect  // a-side = IOS-XR -->
+			  <xconnect when="{$os-a-side='ios-xr'}">
+                <address>{deref(/a-side/device)/../config/cisco-ios-xr:interface/Loopback[id='1']/ipv4/address/ip}</address>
+                <vcid>{$vc-derived}</vcid>
+                <encapsulation>mpls</encapsulation>
+              </xconnect>
+<!-- ios z-side p2p xconnect  // a-side = IOS -->
+			  <xconnect when="{$os-a-side='ios'}">
+                <address>{deref(/a-side/device)/../config/ios:interface/Loopback[name='1']/ip/address/primary/address}</address>
+                <vcid>{$vc-derived}</vcid>
+                <encapsulation>mpls</encapsulation>
+            </xconnect>	  
+        </instance>
+	  </service>
+	  </GigabitEthernet>
+	  <TenGigabitEthernet when="{$interface-type-z-side='TenGigabitEthernet'}">
+         <name>{$interface-number-z-side}</name>
+		 <service>
+		  <instance>
+              <id>{/z-side/efp-id}</id>
+<!-- ios z-side p2p xconnect  // a-side = IOS-XR -->
+			  <xconnect when="{$os-a-side='ios-xr'}">
+                <address>{deref(/a-side/device)/../config/cisco-ios-xr:interface/Loopback[id='1']/ipv4/address/ip}</address>
+                <vcid>{$vc-derived}</vcid>
+                <encapsulation>mpls</encapsulation>
+              </xconnect>
+<!-- ios z-side p2p xconnect  // a-side = IOS -->
+			  <xconnect when="{$os-a-side='ios'}">
+                <address>{deref(/a-side/device)/../config/ios:interface/Loopback[name='1']/ip/address/primary/address}</address>
+                <vcid>{$vc-derived}</vcid>
+                <encapsulation>mpls</encapsulation>
+            </xconnect>	  
+        </instance>
+	  </service>
+	  </TenGigabitEthernet>
+	  <Port-channel when="{$interface-type-z-side='Port-channel'}">
+		  <name>{$interface-number-z-side}</name>
+		  <service>
+		  <instance>
+              <id>{/z-side/efp-id}</id>
+<!-- ios z-side p2p xconnect  // a-side = IOS-XR -->
+			  <xconnect when="{$os-a-side='ios-xr'}">
+                <address>{deref(/a-side/device)/../config/cisco-ios-xr:interface/Loopback[id='1']/ipv4/address/ip}</address>
+                <vcid>{$vc-derived}</vcid>
+                <encapsulation>mpls</encapsulation>
+              </xconnect>
+<!-- ios z-side p2p xconnect  // a-side = IOS -->
+			  <xconnect when="{$os-a-side='ios'}">
+                <address>{deref(/a-side/device)/../config/ios:interface/Loopback[name='1']/ip/address/primary/address}</address>
+                <vcid>{$vc-derived}</vcid>
+                <encapsulation>mpls</encapsulation>
+            </xconnect>	  
+        </instance>
+	  </service>
+	  </Port-channel>
+	  </interface>
+	</config>
+  </device>
+<!-- z2-side entry point -->
+  <device when="{/backup-vc='yes'}">
+    <name>{/z2-side/device}</name>
+      <config>
+<!-- ios-xr z2-side policy-map Standard egress -->
+      <policy-map xmlns="http://tail-f.com/ned/cisco-ios-xr" when="{string(/product/product-name)='Standard'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+        <class>
+          <class-default>
+            <map>class-default</map>
+            <police-rate-unit>
+              <police>
+                <rate>
+                  <cir>{$product-cir-kbps}</cir>
+                  <cir-unit>kbps</cir-unit>
+                  <burst>{$product-burst-kbyte}</burst>
+                  <burst-units>kbytes</burst-units>
+                  <conform-action>
+                    <transmit/>
+                  </conform-action>
+                </rate>
+              </police>
+            </police-rate-unit>
+          </class-default>
+        </class>
+      </policy-map>
+<!-- ios-xr z2-side policy-map Voice egress -->
+      <policy-map xmlns="http://tail-f.com/ned/cisco-ios-xr" when="{string(/product/product-name)='Voice'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+        <class>
+          <class-default>
+            <map>class-default</map>
+            <police-rate-unit>
+              <police>
+                <rate>
+                  <cir>{$product-cir-kbps}</cir>
+                  <cir-unit>kbps</cir-unit>
+                  <burst>{$product-burst-kbyte}</burst>
+                  <burst-units>kbytes</burst-units>
+                  <conform-action>
+                    <transmit/>
+                  </conform-action>
+                </rate>
+              </police>
+            </police-rate-unit>
+          </class-default>
+        </class>
+      </policy-map>
+<!-- ios-xr z2-side policy-map Standard ingress -->
+      <policy-map xmlns="http://tail-f.com/ned/cisco-ios-xr" when="{string(/product/product-name)='Standard'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+        <class>
+          <class-default>
+            <map>class-default</map>
+            <police-rate-unit>
+              <police>
+                <rate>
+                  <cir>{$product-cir-kbps}</cir>
+                  <cir-unit>kbps</cir-unit>
+                  <burst>{$product-burst-kbyte}</burst>
+                  <burst-units>kbytes</burst-units>
+                  <conform-action>
+                    <set>
+                      <mpls>
+                        <experimental>
+                          <topmost>2</topmost>
+                        </experimental>
+                      </mpls>
+                    </set>
+                  </conform-action>
+                </rate>
+              </police>
+            </police-rate-unit>
+          </class-default>
+        </class>
+      </policy-map>
+<!-- ios-xr z2-side policy-map Voice ingress -->
+      <policy-map xmlns="http://tail-f.com/ned/cisco-ios-xr" when="{string(/product/product-name)='Voice'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+        <class>
+          <class-default>
+            <map>class-default</map>
+            <police-rate-unit>
+              <police>
+                <rate>
+                  <cir>{$product-cir-kbps}</cir>
+                  <cir-unit>kbps</cir-unit>
+                  <burst>{$product-burst-kbyte}</burst>
+                  <burst-units>kbytes</burst-units>
+                  <conform-action>
+                    <set>
+                      <mpls>
+                        <experimental>
+                          <topmost>5</topmost>
+                        </experimental>
+                      </mpls>
+                    </set>
+                  </conform-action>
+                </rate>
+              </police>
+            </police-rate-unit>
+          </class-default>
+        </class>
+      </policy-map>
+<!-- ios z2-side policy-map Standard egress -->
+      <policy-map xmlns="urn:ios" when="{string(/product/product-name)='Standard'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-C-E</name>
+        <class-default>
+          <class>
+            <name>class-default</name>
+            <bandwidth>
+              <percent>100</percent>
+            </bandwidth>
+          </class>
+        </class-default>
+      </policy-map>
+      <policy-map xmlns="urn:ios" when="{string(/product/product-name)='Standard'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+        <class-default>
+          <class>
+            <name>class-default</name>
+            <shape>
+              <average>
+                <bit-rate>{$product-cir-bps}</bit-rate>
+              </average>
+            </shape>
+            <service-policy>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-C-E</service-policy>
+          </class>
+        </class-default>
+      </policy-map>
+<!-- ios z2-side policy-map Voice egress -->
+      <policy-map xmlns="urn:ios" when="{string(/product/product-name)='Voice'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-C-E</name>
+        <class-default>
+          <class>
+            <name>class-default</name>
+            <bandwidth>
+              <percent>100</percent>
+            </bandwidth>
+          </class>
+        </class-default>
+      </policy-map>
+      <policy-map xmlns="urn:ios" when="{string(/product/product-name)='Voice'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+        <class-default>
+          <class>
+            <name>class-default</name>
+            <shape>
+              <average>
+                <bit-rate>{$product-cir-bps}</bit-rate>
+              </average>
+            </shape>
+            <service-policy>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-C-E</service-policy>
+          </class>
+        </class-default>
+      </policy-map>
+<!-- ios z2-side policy-map Standard ingress -->
+      <policy-map xmlns="urn:ios" when="{string(/product/product-name)='Standard'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+        <class-default>
+          <class>
+            <name>class-default</name>
+            <police-policy-map>
+              <police>
+                <cir>{$product-cir-bps}</cir>
+                <bc>{$product-burst-byte}</bc>
+                <actions>
+                  <conform-set-mpls-exp-imposition-transmit>
+                    <conform-action>
+                      <set-mpls-exp-imposition-transmit>2</set-mpls-exp-imposition-transmit>
+                    </conform-action>
+                  </conform-set-mpls-exp-imposition-transmit>
+                </actions>
+              </police>
+            </police-policy-map>
+          </class>
+        </class-default>
+      </policy-map>
+<!-- ios z2-side policy-map Voice ingress -->
+      <policy-map xmlns="urn:ios" when="{string(/product/product-name)='Voice'}">
+        <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+        <class-default>
+          <class>
+            <name>class-default</name>
+            <police-policy-map>
+              <police>
+                <cir>{$product-cir-bps}</cir>
+                <bc>{$product-burst-byte}</bc>
+                <actions>
+                  <conform-set-mpls-exp-imposition-transmit>
+                    <conform-action>
+                      <set-mpls-exp-imposition-transmit>5</set-mpls-exp-imposition-transmit>
+                    </conform-action>
+                  </conform-set-mpls-exp-imposition-transmit>
+                </actions>
+              </police>
+            </police-policy-map>
+          </class>
+        </class-default>
+      </policy-map>
+<!-- ios-xr z2-side l2tp ethernet-services access-list -->
+      <ethernet-services xmlns="http://tail-f.com/ned/cisco-ios-xr" when="{$l2tpacl-z2-side='yes'}">
+        <access-list>
+          <name>BLOCK_TUNNEL</name>
+          <rule>
+            <id>10</id>
+            <line>deny any host 0100.0ccd.cdd0</line>
+          </rule>
+          <rule>
+            <id>20</id>
+            <line>deny host 0100.0ccd.cdd0 any</line>
+          </rule>
+          <rule>
+            <id>30</id>
+            <line>permit any any</line>
+          </rule>
+        </access-list>
+      </ethernet-services>
+<!-- ios-xr z2-side interfaces -->
+      <interface xmlns="http://tail-f.com/ned/cisco-ios-xr">
+<!-- ios-xr z2-side main interface GigabitEthernet -->
+      <GigabitEthernet when="{$interface-type-z2-side='GigabitEthernet'}">
+        <id>{$interface-number-z2-side}</id>
+        <!--description tags="delete"/-->
+		<description when="{not(/z2-side/new-if-description-Gigabit='')}">{/z2-side/new-if-description-Gigabit}</description>
+        <mtu>9014</mtu>
+        <ipv4 tags="delete"/>
+        <proxy-arp tags="delete"/>
+        <transceiver>
+          <permit>
+            <pid>
+              <all/>
+            </pid>
+          </permit>
+        </transceiver>
+		<ethernet when="{$eoam-z2-side='yes'}">
+          <oam>
+            <action>
+              <wiring-conflict>disable</wiring-conflict>
+            </action>
+          </oam>
+        </ethernet>
+        <ethernet when="{$eoam-z2-side='no'}">
+          <oam tags="delete"/>
+        </ethernet>
+        <shutdown tags="delete"/>
+        <negotiation when="{$negauto-z2-side='yes'}">
+          <auto/>
+        </negotiation>
+        <negotiation when="{$negauto-z2-side='no'}">
+          <auto tags="delete"/>
+        </negotiation>
+      </GigabitEthernet>
+<!-- ios-xr z2-side subinterfaces GigabitEthernet -->
+      <GigabitEthernet-subinterface when="{$interface-type-z2-side='GigabitEthernet'}">
+<!-- ios-xr z2-side subinterface GigabitEthernet.90 -->
+        <GigabitEthernet when="{not(/z2-side/cpe='none')}">
+          <id>{$interface-number-z2-side}.90</id>
+          <mode>l2transport</mode>
+          <encapsulation>
+            <dot1q>
+              <vlan-id>90</vlan-id>
+            </dot1q>
+          </encapsulation>
+          <rewrite>
+            <ingress>
+              <tag>
+                <pop>1</pop>
+                <mode>symmetric</mode>
+              </tag>
+            </ingress>
+          </rewrite>
+        </GigabitEthernet>
+<!-- ios-xr z2-side subinterface GigabitEthernet.efp-id -->
+        <GigabitEthernet>
+          <id tags="create">{$interface-number-z2-side}.{/z2-side/efp-id}</id>
+          <mode>l2transport</mode>
+          <description>{string(/name)} {/z2-side/efp-description} Backup</description>
+          <encapsulation when="{/z2-side/encapsulation='default'}">
+            <default/>
+          </encapsulation>
+          <encapsulation when="{/z2-side/encapsulation='dot1q'}">
+            <dot1q>
+              <vlan-id>{/z2-side/outer-vlan-id}</vlan-id>
+            </dot1q>
+          </encapsulation>
+          <encapsulation when="{/z2-side/encapsulation='untagged'}">
+            <untagged/>
+          </encapsulation>
+          <service-policy when="{string(/product/product-name)='Standard'}">
+            <input>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+            </input>
+            <output>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+            </output>
+          </service-policy>
+          <service-policy when="{string(/product/product-name)='Voice'}">
+            <input>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+            </input>
+            <output>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+            </output>
+          </service-policy>
+          <ethernet-services when="{$l2tpacl-z2-side='yes'}">
+            <access-group>
+              <direction>egress</direction>
+              <name>BLOCK_TUNNEL</name>
+            </access-group>
+          </ethernet-services>
+          <rewrite when="{/z2-side/encapsulation='dot1q'}">
+            <ingress when="{/z2-side/vlan-tag-operation='pop'}">
+              <tag when="{not(/z2-side/rewrite-pop-action='none')}">
+                <pop>{/z2-side/rewrite-pop-action}</pop>
+                <mode>symmetric</mode>
+              </tag>
+            </ingress>
+          </rewrite>
+        </GigabitEthernet>
+      </GigabitEthernet-subinterface>
+<!-- ios-xr z2-side main interface TenGigE -->
+      <TenGigE when="{$interface-type-z2-side='TenGigE'}">
+        <id>{$interface-number-z2-side}</id>
+        <!--description tags="delete"/-->
+		<description when="{not(/z2-side/new-if-description-TenGigE='')}">{/z2-side/new-if-description-TenGigE}</description>
+        <mtu>9014</mtu>
+        <ipv4 tags="delete"/>
+        <proxy-arp tags="delete"/>
+        <transceiver>
+          <permit>
+            <pid>
+              <all/>
+            </pid>
+          </permit>
+        </transceiver>
+		<ethernet when="{$eoam-z2-side='yes'}">
+          <oam>
+            <action>
+              <wiring-conflict>disable</wiring-conflict>
+            </action>
+          </oam>
+        </ethernet>
+        <ethernet when="{$eoam-z2-side='no'}">
+          <oam tags="delete"/>
+        </ethernet>
+        <shutdown tags="delete"/>
+      </TenGigE>
+<!-- ios-xr z2-side subinterfaces TenGigE -->
+      <TenGigE-subinterface when="{$interface-type-z2-side='TenGigE'}">
+<!-- ios-xr z2-side subinterface TenGigE.90 -->
+        <TenGigE when="{not(/z2-side/cpe='none')}">
+          <id>{$interface-number-z2-side}.90</id>
+          <mode>l2transport</mode>
+          <encapsulation>
+            <dot1q>
+              <vlan-id>90</vlan-id>
+            </dot1q>
+          </encapsulation>
+          <rewrite>
+            <ingress>
+              <tag>
+                <pop>1</pop>
+                <mode>symmetric</mode>
+              </tag>
+            </ingress>
+          </rewrite>
+        </TenGigE>
+<!-- ios-xr z2-side subinterface TenGigE.efp-id -->
+        <TenGigE>
+          <id tags="create">{$interface-number-z2-side}.{/z2-side/efp-id}</id>
+          <mode>l2transport</mode>
+          <description>{string(/name)} {/z2-side/efp-description} Backup</description>
+          <encapsulation when="{/z2-side/encapsulation='default'}">
+            <default/>
+          </encapsulation>
+          <encapsulation when="{/z2-side/encapsulation='dot1q'}">
+            <dot1q>
+              <vlan-id>{/z2-side/outer-vlan-id}</vlan-id>
+            </dot1q>
+          </encapsulation>
+          <encapsulation when="{/z2-side/encapsulation='untagged'}">
+            <untagged/>
+          </encapsulation>
+          <service-policy when="{string(/product/product-name)='Standard'}">
+            <input>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+            </input>
+            <output>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+            </output>
+          </service-policy>
+          <service-policy when="{string(/product/product-name)='Voice'}">
+            <input>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+            </input>
+            <output>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+            </output>
+          </service-policy>
+          <ethernet-services when="{$l2tpacl-z2-side='yes'}">
+            <access-group>
+              <direction>egress</direction>
+              <name>BLOCK_TUNNEL</name>
+            </access-group>
+          </ethernet-services>
+          <rewrite when="{/z2-side/encapsulation='dot1q'}">
+            <ingress when="{/z2-side/vlan-tag-operation='pop'}">
+              <tag when="{not(/z2-side/rewrite-pop-action='none')}">
+                <pop>{/z2-side/rewrite-pop-action}</pop>
+                <mode>symmetric</mode>
+              </tag>
+            </ingress>
+          </rewrite>
+        </TenGigE>
+      </TenGigE-subinterface>
+<!-- ios-xr z2-side main interface Bundle-Ether -->
+      <Bundle-Ether when="{$interface-type-z2-side='Bundle-Ether'}">
+        <id>{$interface-number-z2-side}</id>
+        <!--description tags="delete"/-->
+		<description when="{not(/z2-side/new-if-description-Bundle='')}">{/z2-side/new-if-description-Bundle}</description>
+        <mtu>9014</mtu>
+        <ipv4 tags="delete"/>
+        <proxy-arp tags="delete"/>
+        <shutdown tags="delete"/>
+      </Bundle-Ether>
+<!-- ios-xr z2-side subinterfaces Bundle-Ether -->
+      <Bundle-Ether-subinterface when="{$interface-type-z2-side='Bundle-Ether'}">
+<!-- ios-xr z2-side subinterface Bundle-Ether.90 -->
+        <Bundle-Ether when="{not(/z2-side/cpe='none')}">
+          <id>{$interface-number-z2-side}.90</id>
+          <mode>l2transport</mode>
+          <encapsulation>
+            <dot1q>
+              <vlan-id>90</vlan-id>
+            </dot1q>
+          </encapsulation>
+          <rewrite>
+            <ingress>
+              <tag>
+                <pop>1</pop>
+                <mode>symmetric</mode>
+              </tag>
+            </ingress>
+          </rewrite>
+        </Bundle-Ether>
+<!-- ios-xr z2-side subinterface Bundle-Ether.efp-id -->
+        <Bundle-Ether>
+          <id tags="create">{$interface-number-z2-side}.{/z2-side/efp-id}</id>
+          <mode>l2transport</mode>
+          <description>{string(/name)} {/z2-side/efp-description} Backup</description>
+          <encapsulation when="{/z2-side/encapsulation='default'}">
+            <default/>
+          </encapsulation>
+          <encapsulation when="{/z2-side/encapsulation='dot1q'}">
+            <dot1q>
+              <vlan-id>{/z2-side/outer-vlan-id}</vlan-id>
+            </dot1q>
+          </encapsulation>
+          <encapsulation when="{/z2-side/encapsulation='untagged'}">
+            <untagged/>
+          </encapsulation>
+          <service-policy when="{string(/product/product-name)='Standard'}">
+            <input>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+            </input>
+            <output>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+            </output>
+          </service-policy>
+          <service-policy when="{string(/product/product-name)='Voice'}">
+            <input>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+            </input>
+            <output>
+              <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+            </output>
+          </service-policy>
+          <ethernet-services when="{$l2tpacl-z2-side='yes'}">
+            <access-group>
+              <direction>egress</direction>
+              <name>BLOCK_TUNNEL</name>
+            </access-group>
+          </ethernet-services>
+          <rewrite when="{/z2-side/encapsulation='dot1q'}">
+            <ingress when="{/z2-side/vlan-tag-operation='pop'}">
+              <tag when="{not(/z2-side/rewrite-pop-action='none')}">
+                <pop>{/z2-side/rewrite-pop-action}</pop>
+                <mode>symmetric</mode>
+              </tag>
+            </ingress>
+          </rewrite>
+        </Bundle-Ether>
+      </Bundle-Ether-subinterface>
+      </interface>
+<!-- ios z2-side interface GigabitEthernet -->
+      <interface xmlns="urn:ios">
+        <GigabitEthernet when="{$interface-type-z2-side='GigabitEthernet'}">
+          <name>{$interface-number-z2-side}</name>
+          <!--description tags="delete"/-->
+		  <description when="{not(/z2-side/new-if-description-Ge='')}">{/z2-side/new-if-description-Ge}</description>
+          <switchport when="{$platform-z2-side='ME-3600X'}">
+            <mode>
+              <trunk/>
+            </mode>
+            <trunk>
+              <allowed>
+                <vlan>
+                  <none/>
+                </vlan>
+              </allowed>
+            </trunk>
+          </switchport>
+          <ethernet when="{$eoam-z2-side='yes'}">
+            <oam/>
+          </ethernet>
+          <ethernet when="{$eoam-z2-side='no'}">
+            <oam tags="delete"/>
+          </ethernet>
+          <service>
+            <instance when="{not(/z2-side/cpe='none')}">
+              <id>90</id>
+              <ethernet/>
+              <encapsulation>
+                <dot1q>
+                  <id>90</id>
+                </dot1q>
+              </encapsulation>
+              <rewrite>
+                <ingress>
+                  <tag>
+                    <pop>1</pop>
+                    <mode>symmetric</mode>
+                  </tag>
+                </ingress>
+              </rewrite>
+              <bridge-domain>
+                <bridge-id>90</bridge-id>
+              </bridge-domain>
+            </instance>
+            <instance>
+              <id tags="create">{/z2-side/efp-id}</id>
+              <ethernet/>
+              <description>{string(/name)} {/z2-side/efp-description} Backup</description>
+              <encapsulation when="{/z2-side/encapsulation='default'}">
+                <default/>
+              </encapsulation>
+              <encapsulation when="{/z2-side/encapsulation='dot1q'}">
+                <dot1q>
+                  <id>{/z2-side/outer-vlan-id}</id>
+                </dot1q>
+              </encapsulation>
+              <encapsulation when="{/z2-side/encapsulation='untagged'}">
+                <untagged/>
+              </encapsulation>
+              <rewrite when="{/z2-side/encapsulation='dot1q'}">
+                <ingress when="{/z2-side/vlan-tag-operation='pop'}">
+                  <tag when="{not(/z2-side/rewrite-pop-action='none')}">
+                    <pop>{/z2-side/rewrite-pop-action}</pop>
+                    <mode>symmetric</mode>
+                  </tag>
+                </ingress>
+              </rewrite>
+              <l2protocol>
+                <forward>
+                </forward>
+              </l2protocol>
+              <service-policy when="{string(/product/product-name)='Standard'}">
+                <input>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+                </input>
+                <output>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+                </output>
+              </service-policy>
+              <service-policy when="{string(/product/product-name)='Voice'}">
+                <input>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+                </input>
+                <output>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+                </output>
+              </service-policy>
+            </instance>
+          </service>
+          <mtu>9000</mtu>
+          <negotiation when="{not($platform-z2-side='ME-3600X')}">
+            <auto when="{$negauto-z2-side='yes'}">true</auto>
+            <auto when="{$negauto-z2-side='no'}">false</auto>
+          </negotiation>
+          <speed when="{$platform-z2-side='ME-3600X' and $negauto-z2-side='yes'}" tags="delete"/>
+          <speed when="{$platform-z2-side='ME-3600X' and $negauto-z2-side='no'}">nonegotiate</speed>
+          <shutdown tags="delete"/>
+        </GigabitEthernet>
+<!-- ios z2-side interface TenGigabitEthernet -->
+        <TenGigabitEthernet when="{$interface-type-z2-side='TenGigabitEthernet'}">
+          <name>{$interface-number-z2-side}</name>
+          <!--description tags="delete"/-->
+		  <description when="{not(/z2-side/new-if-description-Te='')}">{/z2-side/new-if-description-Te}</description>
+          <switchport when="{$platform-z2-side='ME-3600X'}">
+            <mode>
+              <trunk/>
+            </mode>
+            <trunk>
+              <allowed>
+                <vlan>
+                  <none/>
+                </vlan>
+              </allowed>
+            </trunk>
+          </switchport>
+          <ethernet when="{$eoam-z2-side='yes'}">
+            <oam/>
+          </ethernet>
+          <ethernet when="{$eoam-z2-side='no'}">
+            <oam tags="delete"/>
+          </ethernet>
+          <service>
+            <instance when="{not(/z2-side/cpe='none')}">
+              <id>90</id>
+              <ethernet/>
+              <encapsulation>
+                <dot1q>
+                  <id>90</id>
+                </dot1q>
+              </encapsulation>
+              <rewrite>
+                <ingress>
+                  <tag>
+                    <pop>1</pop>
+                    <mode>symmetric</mode>
+                  </tag>
+                </ingress>
+              </rewrite>
+              <bridge-domain>
+                <bridge-id>90</bridge-id>
+              </bridge-domain>
+            </instance>
+            <instance>
+              <id tags="create">{/z2-side/efp-id}</id>
+              <ethernet/>
+              <description>{string(/name)} {/z2-side/efp-description} Backup</description>
+              <encapsulation when="{/z2-side/encapsulation='default'}">
+                <default/>
+              </encapsulation>
+              <encapsulation when="{/z2-side/encapsulation='dot1q'}">
+                <dot1q>
+                  <id>{/z2-side/outer-vlan-id}</id>
+                </dot1q>
+              </encapsulation>
+              <encapsulation when="{/z2-side/encapsulation='untagged'}">
+                <untagged/>
+              </encapsulation>
+              <rewrite when="{/z2-side/encapsulation='dot1q'}">
+                <ingress when="{/z2-side/vlan-tag-operation='pop'}">
+                  <tag when="{not(/z2-side/rewrite-pop-action='none')}">
+                    <pop>{/z2-side/rewrite-pop-action}</pop>
+                    <mode>symmetric</mode>
+                  </tag>
+                </ingress>
+              </rewrite>
+              <l2protocol>
+                <forward>
+                </forward>
+              </l2protocol>
+              <service-policy when="{string(/product/product-name)='Standard'}">
+                <input>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+                </input>
+                <output>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+                </output>
+              </service-policy>
+              <service-policy when="{string(/product/product-name)='Voice'}">
+                <input>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+                </input>
+                <output>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+                </output>
+              </service-policy>
+            </instance>
+          </service>
+          <mtu>9000</mtu>
+          <shutdown tags="delete"/>
+        </TenGigabitEthernet>
+<!-- ios z2-side interface Port-channel -->
+        <Port-channel when="{$interface-type-z2-side='Port-channel'}">
+          <name>{$interface-number-z2-side}</name>
+          <!--description tags="delete"/-->
+		  <description when="{not(/z2-side/new-if-description-Port-channel='')}">{/z2-side/new-if-description-Port-channel}</description>
+          <switchport when="{$platform-z2-side='ME-3600X'}">
+            <mode>
+              <trunk/>
+            </mode>
+            <trunk>
+              <allowed>
+                <vlan>
+                  <none/>
+                </vlan>
+              </allowed>
+            </trunk>
+          </switchport>
+          <service>
+            <instance when="{not(/z2-side/cpe='none')}">
+              <id>90</id>
+              <ethernet/>
+              <encapsulation>
+                <dot1q>
+                  <id>90</id>
+                </dot1q>
+              </encapsulation>
+              <rewrite>
+                <ingress>
+                  <tag>
+                    <pop>1</pop>
+                    <mode>symmetric</mode>
+                  </tag>
+                </ingress>
+              </rewrite>
+              <bridge-domain>
+                <bridge-id>90</bridge-id>
+              </bridge-domain>
+            </instance>
+            <instance>
+              <id tags="create">{/z2-side/efp-id}</id>
+              <ethernet/>
+              <description>{string(/name)} {/z2-side/efp-description} Backup</description>
+              <encapsulation when="{/z2-side/encapsulation='default'}">
+                <default/>
+              </encapsulation>
+              <encapsulation when="{/z2-side/encapsulation='dot1q'}">
+                <dot1q>
+                  <id>{/z2-side/outer-vlan-id}</id>
+                </dot1q>
+              </encapsulation>
+              <encapsulation when="{/z2-side/encapsulation='untagged'}">
+                <untagged/>
+              </encapsulation>
+              <rewrite when="{/z2-side/encapsulation='dot1q'}">
+                <ingress when="{/z2-side/vlan-tag-operation='pop'}">
+                  <tag when="{not(/z2-side/rewrite-pop-action='none')}">
+                    <pop>{/z2-side/rewrite-pop-action}</pop>
+                    <mode>symmetric</mode>
+                  </tag>
+                </ingress>
+              </rewrite>
+              <l2protocol>
+                <forward>
+                </forward>
+              </l2protocol>
+              <service-policy when="{string(/product/product-name)='Standard'}">
+                <input>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-I</name>
+                </input>
+                <output>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-S-NNI-P-E</name>
+                </output>
+              </service-policy>
+              <service-policy when="{string(/product/product-name)='Voice'}">
+                <input>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-I</name>
+                </input>
+                <output>
+                  <name>PMAP-{string(/product/product-bandwidth)}.0-V-NNI-P-E</name>
+                </output>
+              </service-policy>
+            </instance>
+          </service>
+          <mtu>9000</mtu>
+          <shutdown tags="delete"/>
+        </Port-channel>
+      </interface>
+<!-- ios-xr z2-side l2vpn -->
+      <l2vpn xmlns="http://tail-f.com/ned/cisco-ios-xr">
+<!-- ios-xr z2-side bridge-group & bridge-domain MGMT -->
+        <bridge when="{not(/z2-side/cpe='none')}">
+          <group>
+            <group-name>MGMT</group-name>
+            <bridge-domain>
+              <bridge-domain-name>MGMT</bridge-domain-name>
+              <interface>
+                <name>{$interface-z2-side}.90</name>
+              </interface>
+            </bridge-domain>
+          </group>
+		 </bridge>
+ <!-- ios-xr z2-side p2p xconnect -->
+       <xconnect>
+       <group>
+         <name>{/z2-side/xconnect-group-name}</name>
+ <!-- ios-xr z2-side p2p xconnect  // a-side = IOS-XR -->
+		 <p2p when="{$os-a-side='ios-xr'}">
+           <name tags="create">{/name}</name>
+		   <interface>
+             <name>{$interface-z2-side}.{/z2-side/efp-id}</name>
+           </interface>
+           <neighbor>
+             <address>{deref(/a-side/device)/../config/cisco-ios-xr:interface/Loopback[id='1']/ipv4/address/ip}</address>
+             <pw-id>{$vc-backup-derived}</pw-id>
+             <ip-version>ipv4</ip-version>
+		   </neighbor>
+         </p2p>
+<!-- ios-xr z2-side p2p xconnect  // a-side = IOS -->
+		 <p2p when="{$os-a-side='ios'}">
+           <name tags="create">{/name}</name>
+		   <interface>
+             <name>{$interface-z2-side}.{/z2-side/efp-id}</name>
+           </interface>
+           <neighbor>
+             <address>{deref(/a-side/device)/../config/ios:interface/Loopback[name='1']/ip/address/primary/address}</address>
+             <pw-id>{$vc-backup-derived}</pw-id>
+             <ip-version>ipv4</ip-version>
+		  </neighbor>
+         </p2p>
+       </group>
+       </xconnect>
+      </l2vpn>
+ <!-- ios z2-side p2p xconnect -->
+	  <interface xmlns="urn:ios">
+        <GigabitEthernet when="{$interface-type-z2-side='GigabitEthernet'}">
+          <name>{$interface-number-z2-side}</name>
+		  <service>
+		  <instance>
+              <id>{/z2-side/efp-id}</id>
+<!-- ios z2-side p2p xconnect  // a-side = IOS-XR -->
+			  <xconnect when="{$os-a-side='ios-xr'}">
+                <address>{deref(/a-side/device)/../config/cisco-ios-xr:interface/Loopback[id='1']/ipv4/address/ip}</address>
+                <vcid>{$vc-backup-derived}</vcid>
+                <encapsulation>mpls</encapsulation>
+              </xconnect>
+<!-- ios z2-side p2p xconnect  // a-side = IOS -->
+			  <xconnect when="{$os-a-side='ios'}">
+                <address>{deref(/a-side/device)/../config/ios:interface/Loopback[name='1']/ip/address/primary/address}</address>
+                <vcid>{$vc-backup-derived}</vcid>
+                <encapsulation>mpls</encapsulation>
+            </xconnect>	  
+        </instance>
+	  </service>
+	  </GigabitEthernet>
+	  <TenGigabitEthernet when="{$interface-type-z2-side='TenGigabitEthernet'}">
+         <name>{$interface-number-z2-side}</name>
+		 <service>
+		  <instance>
+              <id>{/z2-side/efp-id}</id>
+<!-- ios z2-side p2p xconnect  // a-side = IOS-XR -->
+			  <xconnect when="{$os-a-side='ios-xr'}">
+                <address>{deref(/a-side/device)/../config/cisco-ios-xr:interface/Loopback[id='1']/ipv4/address/ip}</address>
+                <vcid>{$vc-backup-derived}</vcid>
+                <encapsulation>mpls</encapsulation>
+              </xconnect>
+<!-- ios z2-side p2p xconnect  // a-side = IOS -->
+			  <xconnect when="{$os-a-side='ios'}">
+                <address>{deref(/a-side/device)/../config/ios:interface/Loopback[name='1']/ip/address/primary/address}</address>
+                <vcid>{$vc-backup-derived}</vcid>
+                <encapsulation>mpls</encapsulation>
+            </xconnect>	  
+        </instance>
+	  </service>
+	  </TenGigabitEthernet>
+	  <Port-channel when="{$interface-type-z2-side='Port-channel'}">
+		  <name>{$interface-number-z2-side}</name>
+		  <service>
+		  <instance>
+              <id>{/z2-side/efp-id}</id>
+<!-- ios z2-side p2p xconnect  // a-side = IOS-XR -->
+			  <xconnect when="{$os-a-side='ios-xr'}">
+                <address>{deref(/a-side/device)/../config/cisco-ios-xr:interface/Loopback[id='1']/ipv4/address/ip}</address>
+                <vcid>{$vc-backup-derived}</vcid>
+                <encapsulation>mpls</encapsulation>
+              </xconnect>
+<!-- ios z2-side p2p xconnect  // a-side = IOS -->
+			  <xconnect when="{$os-a-side='ios'}">
+                <address>{deref(/a-side/device)/../config/ios:interface/Loopback[name='1']/ip/address/primary/address}</address>
+                <vcid>{$vc-backup-derived}</vcid>
+                <encapsulation>mpls</encapsulation>
+            </xconnect>	  
+        </instance>
+	  </service>
+	  </Port-channel>
+	  </interface>
+	</config>
+  </device>  
+  </devices>
+</config-template>
